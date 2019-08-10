@@ -1,45 +1,52 @@
 class Field{
 
-    constructor(circleR=70, redLineThickness=10, fieldLineThickness=3){
-        this.cR = circleR;
-        this.rlt = redLineThickness;
-        this.flt = fieldLineThickness;
+    constructor(flCol,flcR, flTh, fboxCol, fboxTh, fdangerCol, fdangerTh, sidelCol, sidelTh){
+        this.flC = flCol;
+        this.cR = flcR;
+        this.flt = flTh;
+
+        this.fbC = fboxCol;
+        this.fbt = fboxTh;
+
+        this.dlC = fdangerCol;
+        this.dlt = fdangerTh;
+
+        this.slC = sidelCol;
+        this.slt = sidelTh;
+
     }
 
     show(w, h, bS){
         background(0);
 
-        //field lines
-        //circle
+        //fieldLines
+        //innerCircle
         translate(w/2, h/2); //center
-        stroke(10,20,30);
+        stroke(this.flC);
         strokeWeight(this.flt);
         noFill();
-        ellipseMode(CENTER); //center
         ellipse(0, 0, this.cR*2, this.cR*2);
-        ellipseMode(CORNER); //normal
         translate(-w/2,-h/2); //normal
-        //lines
+        //innerLines
         line(0, height/2, width/2-this.cR, height/2);
         line(width - (width/2-this.cR), height/2, width, height/2);
 
-        //boxlines
-        stroke(100);
-        strokeWeight(this.flt);
+        //boxLines
+        stroke(this.fbC);
+        strokeWeight(this.fbt);
         line(width*bS,0,width*bS,height);
         line(width - width*bS,0,width - width*bS,height);
 
-        //redlines
-        stroke(255,0,0);
-        strokeWeight(this.rlt);
+        //dangerLines
+        stroke(this.dlC);
+        strokeWeight(this.dlt);
         line(0,0,0,height);
         line(width,0,width,height);
 
-        //greenlines
-        stroke(10,20,150);
-        strokeWeight(this.rlt);
+        //sideLines
+        stroke(this.slC);
+        strokeWeight(this.slt);
         line(0,0,width,0);
         line(0,height,width,height);
-
     }
 }

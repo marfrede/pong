@@ -96,6 +96,9 @@ class Ball{
             }
         });
     }
+    touchesWall(w,h){
+        return (this.touchesBottomWall(h) || this.touchesLeftWall() || this.touchesRightWall(w) || this.touchesTopWall())
+    }
 
     touchesTopWall(){
         if(this.pos.y <= this.r) return true;
