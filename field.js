@@ -1,51 +1,37 @@
 class Field{
 
-    constructor(flCol,flcR, flTh, fboxCol, fboxTh, fdangerCol, fdangerTh, sidelCol, sidelTh){
-        this.flC = flCol;
-        this.cR = flcR;
-        this.flt = flTh;
+    constructor(){}
 
-        this.fbC = fboxCol;
-        this.fbt = fboxTh;
-
-        this.dlC = fdangerCol;
-        this.dlt = fdangerTh;
-
-        this.slC = sidelCol;
-        this.slt = sidelTh;
-
-    }
-
-    show(w, h, bS){
-        background(0);
+    show(){
+        background(backgroundClr);
 
         //fieldLines
         //innerCircle
-        translate(w/2, h/2); //center
-        stroke(this.flC);
-        strokeWeight(this.flt);
+        translate(width/2, height/2); //center
+        stroke(fieldInnerLineColor);
+        strokeWeight(fieldInnerLineThicknes);
         noFill();
-        ellipse(0, 0, this.cR*2, this.cR*2);
-        translate(-w/2,-h/2); //normal
+        ellipse(0, 0, fieldInnerLineCircleRadius*2, fieldInnerLineCircleRadius*2);
+        translate(-width/2,-height/2); //normal
         //innerLines
-        line(0, height/2, width/2-this.cR, height/2);
-        line(width - (width/2-this.cR), height/2, width, height/2);
+        line(0, height/2, width/2-fieldInnerLineCircleRadius, height/2);
+        line(width - (width/2-fieldInnerLineCircleRadius), height/2, width, height/2);
 
         //boxLines
-        stroke(this.fbC);
-        strokeWeight(this.fbt);
-        line(width*bS,0,width*bS,height);
-        line(width - width*bS,0,width - width*bS,height);
+        stroke(fieldBoxLinesClr);
+        strokeWeight(fieldBoxLineThickness);
+        line(width*boxSpace,0,width*boxSpace,height);
+        line(width - width*boxSpace,0,width - width*boxSpace,height);
 
         //dangerLines
-        stroke(this.dlC);
-        strokeWeight(this.dlt);
+        stroke(fieldDangerLinesClr);
+        strokeWeight(fieldDangerLinesThickness);
         line(0,0,0,height);
         line(width,0,width,height);
 
         //sideLines
-        stroke(this.slC);
-        strokeWeight(this.slt);
+        stroke(fieldSideLinesClr);
+        strokeWeight(fieldSideLinesThickness);
         line(0,0,width,0);
         line(0,height,width,height);
     }

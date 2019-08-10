@@ -1,10 +1,11 @@
 class Wave{
-    constructor(posx,posy,strokeclr=255){
+    constructor(posx,posy,radius,strokeclr){
         this.pos = createVector(posx,posy);
-        this.r = 15;
+        this.r = radius;
         this.color = strokeclr;
-        this.alpha = 255;
+        
         this.strikeStroke = false;
+        this.alpha = 255;
     }
 
     show(){

@@ -1,12 +1,13 @@
 class Ball{
-    constructor(fieldW,fieldH,radius=12,speedfactor=0.7){
+    constructor(radius,speedfactor){
         this.r = radius;
         var dir = (random(0,9)<=4)? -1 : 1;
         this.speedX = dir * random(4,5) * speedfactor; 
         dir = (random(0,9)<=4)? -1 : 1;
         this.speedY = dir * random(3,4) * speedfactor;
         this.initSpeedX =  this.speedX;
-        this.pos = createVector( random(this.r,fieldW-this.r),random(this.r,fieldH-this.r));
+        this.pos = createVector( random(this.r,width-this.r),random(this.r,height-this.r));
+        this.field = field;
     }
 
     show(){
@@ -16,23 +17,27 @@ class Ball{
         ellipse(this.pos.x, this.pos.y, this.r*2, this.r*2);
     }
 
-    update(fieldW,fieldH, platforms){ 
+    update(){ 
         this.pos.x += this.speedX;
         this.pos.y += this.speedY;
 
         if(this.touchesLeftWall()){
+            addWaveAt(0, this.pos.y, waveRadius, fieldDangerLinesClr);
             this.goRight();
         }
 
-        if(this.touchesRightWall(fieldW)){
+        if(this.touchesRightWall(width)){
+            addWaveAt(width, this.pos.y,  waveRadius, fieldDangerLinesClr)
             this.goLeft();
         }
 
         if(this.touchesTopWall()){
+            addWaveAt(this.pos.x, 0, waveRadius, fieldSideLinesClr);
             this.goDown();
         }
 
-        if(this.touchesBottomWall(fieldH)){
+        if(this.touchesBottomWall(height)){
+            addWaveAt(this.pos.x, height,  waveRadius, fieldSideLinesClr);
             this.goUp();
         }
 
@@ -44,9 +49,9 @@ class Ball{
                     }else{
                         this.goSlower();
                     }
-                    //this.changeXdir();
                     if(platform.left)   this.goRight();
                     else                this.goLeft();
+
                 }
                 if(this.touchesPlatformOuter(platform)){
                     if(platform.isMovingOutwards()){
@@ -54,7 +59,6 @@ class Ball{
                     }else{
                         this.goSlower();
                     }
-                    //this.changeXdir();
                     if(platform.left)   this.goLeft();
                     else                this.goRight();
 
@@ -96,6 +100,19 @@ class Ball{
             }
         });
     }
+
+    pause(){
+        this.speedXWas = this.speedX;
+        this.speedYWas = this.speedY;
+        this.speedX = 0;
+        this.speedY = 0;
+    }
+
+    resume(){
+        this.speedX = this.speedXWas;
+        this.speedY = this.speedYWas;
+    }
+
     touchesWall(w,h){
         return (this.touchesBottomWall(h) || this.touchesLeftWall() || this.touchesRightWall(w) || this.touchesTopWall())
     }
@@ -236,4 +253,9 @@ class Ball{
     goesRight(){
         return (this.speedX > 0);
     }
+}
+
+function addWaveAt(x, y, radius, strkclr){
+    waves.splice(5,1);
+    waves.unshift(new Wave(x, y, radius, strkclr));
 }

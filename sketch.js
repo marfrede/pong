@@ -6,10 +6,15 @@ var platforms;
 var leftBorderX;
 var rightBorderX;
 
-var framerate = 120;
+var framerate = 120;                        //  120
+var paused = false;
 
 //INITIALIZING                              //  STD VALUES
+//countdown
+var countFrom = 3;                          //      3
+
 //field
+var backgroundClr = 0;                      //      0
 var fieldWith = 700;                        //      700
 var fieldHeigth = 350;                      //      350
 
@@ -25,12 +30,13 @@ var fieldBoxLineThickness = 2;              //      2
 var fieldDangerLinesClr = [255,0,0];        //      255,0,0
 var fieldDangerLinesThickness = 10;         //      10
 
-var fieldSideLinesClr = [10,20,150]         //      10,20,150
+var fieldSideLinesClr = [10,255,150]         //      10,20,150
 var fieldSideLinesThickness = 10;           //      10
 
 
 
 //waves
+var waveRadius = 15;                        //      15
 
 //ball
 var numberOfBalls = 1;                      //      1
@@ -39,6 +45,8 @@ var ballSpeed = 0.7;                        //      0.7
 
 //platforms
 var numberOfPlatformsPerSide = 1;           //      1
+
+var platformClr = [255,255,255]             //      255,255,255
 var platformWidth = 16;                     //      16
 var platformHeight = 64;                    //      64
 var platformSpeed = 6;                      //      6
@@ -49,24 +57,7 @@ function setup() {
     createCanvas(fieldWith,fieldHeigth);
     frameRate(framerate);
 
-    leftBorderX = width * boxSpace;
-    rightBorderX = width - (width * boxSpace);
-
-    field = new Field(
-        fieldInnerLineColor,
-        fieldInnerLineCircleRadius,
-        fieldInnerLineThicknes,
-
-        fieldBoxLinesClr,
-        fieldBoxLineThickness,
-
-        fieldDangerLinesClr,
-        fieldDangerLinesThickness,
-
-        fieldSideLinesClr,
-        fieldSideLinesThickness
-    );
-    wave = new Wave(200,100);
+    field = new Field();
     balls = [];
     for(var i=0; i<numberOfBalls; i++){
         addBall();
@@ -80,14 +71,31 @@ function setup() {
 }
 
 function draw() {
-    field.show(width, height, boxSpace);
+
+
+    field.show();
+
+
+    pause();
+
+    textAlign(CENTER, CENTER);
+    textSize(height/3);
+    text(countFrom, width/2, height/2);
+
+    if(frameCount % 60 == 0 && countFrom >= 0){
+        countFrom--;
+    }
+    if(countFrom == 0){
+        text("LET'S GO", width/2, height/2);
+    }
+    if(countFrom < 0){
+        noText();
+        resume();
+    }
+
     balls.forEach(ball => {
         ball.show();
-        ball.update(width, height, platforms);
-        if(ball.touchesLeftWall()) addWaveAt(0, ball.pos.y, fieldDangerLinesClr);
-        if(ball.touchesBottomWall(height)) addWaveAt(ball.pos.x, height, fieldSideLinesClr);
-        if(ball.touchesRightWall(width)) addWaveAt(width, ball.pos.y, fieldDangerLinesClr);
-        if(ball.touchesTopWall()) addWaveAt(ball.pos.x, 0, fieldSideLinesClr);
+        ball.update();
     });
     platforms.forEach(platform => {
         platform.show();
@@ -103,14 +111,58 @@ function draw() {
     });
 }
 
+function keyPressed(){
+    if(keyCode === 32){
+        if(paused){
+            resume();
+        }
+        else{    
+            pause();
+        }
+        this.paused = !this.paused;
+    }
+}
+
 function addBall(){
-    balls.unshift(new Ball(width, height,ballRadius,ballSpeed));
+    balls.unshift(new Ball(ballRadius, ballSpeed));
 }
 function addPlatform(leftOrRight){
-    platforms.unshift(new Platform(leftOrRight,width, height, boxSpace,platformSpeed,platformWidth,platformHeight));
+    platforms.unshift(new Platform(leftOrRight, platformSpeed, platformWidth, platformHeight));
     return;
 }
-function addWaveAt(x, y, strkclr){
-    waves.splice(5,1);
-    waves.unshift(new Wave(x,y,strkclr));
+
+function pause(){
+    balls.forEach(ball => {
+        ball.pause();
+    });
+    platforms.forEach(platform => {
+        platform.pause();
+    });
+}
+
+function resume(){
+    console.log("Resume");
+    balls.forEach(ball => {
+        ball.resume();
+    });
+    platforms.forEach(platform => {
+        platform.resume();
+    });
+}
+
+function countDown(){
+
+    pause();
+
+    textAlign(CENTER, CENTER);
+    textSize(height/3);
+    text(countFrom, width/2, height/2);
+
+    if(frameCount % 60 == 0 && countFrom > 0){
+        countFrom--;
+    }
+    if(countFrom == 0){
+        text("LET'S GO", width/2, height/2);
+        resume();
+    }
 }
