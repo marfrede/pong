@@ -3,7 +3,6 @@ class Field{
     constructor(){}
 
     show(){
-        background(backgroundClr);
 
         //fieldLines
         //innerCircle

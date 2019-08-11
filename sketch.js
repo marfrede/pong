@@ -1,3 +1,5 @@
+var pg;
+
 var field;
 var waves;
 var balls;
@@ -54,8 +56,10 @@ var platformSpeed = 6;                      //      6
 function setup() {
 
     //setting up
-    createCanvas(fieldWith,fieldHeigth);
     frameRate(framerate);
+    createCanvas(fieldWith,fieldHeigth);
+
+    pg = createGraphics(700, 350);
 
     field = new Field();
     balls = [];
@@ -71,27 +75,12 @@ function setup() {
 }
 
 function draw() {
-
+    background(backgroundClr);
 
     field.show();
 
-
-    pause();
-
-    textAlign(CENTER, CENTER);
-    textSize(height/3);
-    text(countFrom, width/2, height/2);
-
-    if(frameCount % 60 == 0 && countFrom >= 0){
-        countFrom--;
-    }
-    if(countFrom == 0){
-        text("LET'S GO", width/2, height/2);
-    }
-    if(countFrom < 0){
-        noText();
-        resume();
-    }
+    pg.background(120);
+    countDown();
 
     balls.forEach(ball => {
         ball.show();
@@ -152,17 +141,14 @@ function resume(){
 
 function countDown(){
 
-    pause();
-
-    textAlign(CENTER, CENTER);
-    textSize(height/3);
-    text(countFrom, width/2, height/2);
+    pg.textAlign(CENTER, CENTER);
+    pg.textSize(height/3);
+    pg.text(countFrom, width/2, height/2);
 
     if(frameCount % 60 == 0 && countFrom > 0){
         countFrom--;
     }
     if(countFrom == 0){
-        text("LET'S GO", width/2, height/2);
-        resume();
+        pg.text("LET'S GO", width/2, height/2);
     }
 }
