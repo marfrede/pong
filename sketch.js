@@ -1,14 +1,12 @@
-var pg;
+let offsetgraphic;
 
 var field;
 var waves;
 var balls;
 var platforms;
 
-var leftBorderX;
-var rightBorderX;
-
 var framerate = 120;                        //  120
+
 var paused = false;
 
 //INITIALIZING                              //  STD VALUES
@@ -49,7 +47,7 @@ var ballSpeed = 0.7;                        //      0.7
 var numberOfPlatformsPerSide = 1;           //      1
 
 var platformClr = [255,255,255]             //      255,255,255
-var platformWidth = 16;                     //      16
+var platformWidth = 24;                     //      16
 var platformHeight = 64;                    //      64
 var platformSpeed = 6;                      //      6
 
@@ -59,7 +57,8 @@ function setup() {
     frameRate(framerate);
     createCanvas(fieldWith,fieldHeigth);
 
-    pg = createGraphics(700, 350);
+    offsetgraphic = createGraphics(width, height);
+    offsetgraphic.clear();
 
     field = new Field();
     balls = [];
@@ -75,12 +74,10 @@ function setup() {
 }
 
 function draw() {
+
     background(backgroundClr);
 
     field.show();
-
-    pg.background(120);
-    countDown();
 
     balls.forEach(ball => {
         ball.show();
@@ -88,16 +85,15 @@ function draw() {
     });
     platforms.forEach(platform => {
         platform.show();
-        if(platform.left)
-        platform.update(leftBorderX, width, height);
-        else
-        platform.update(rightBorderX, width, height);
+        platform.update();
     });
     
     waves.forEach(wave => {
         wave.show();
         wave.update();
     });
+
+    countdown();
 }
 
 function keyPressed(){
@@ -139,16 +135,25 @@ function resume(){
     });
 }
 
-function countDown(){
-
-    pg.textAlign(CENTER, CENTER);
-    pg.textSize(height/3);
-    pg.text(countFrom, width/2, height/2);
-
-    if(frameCount % 60 == 0 && countFrom > 0){
-        countFrom--;
-    }
-    if(countFrom == 0){
-        pg.text("LET'S GO", width/2, height/2);
+var timer = 3;
+function countdown(){
+    if(timer > 0){
+        pause();
+        image(offsetgraphic,0,0);
+    
+        if(frameCount % 60 == 0 && timer >= 0){
+            offsetgraphic.clear();
+            timer--;
+        }
+        offsetgraphic.textAlign(CENTER,CENTER);
+        offsetgraphic.fill(255,0,0);
+        offsetgraphic.textSize(height/6);
+        if(timer > 0){
+            offsetgraphic.text(timer,width/2,height/2);
+        }
+        if(timer == 0){
+            offsetgraphic.text("START",width/2,height/2);
+            resume();
+        }
     }
 }

@@ -6,7 +6,11 @@ class Ball{
         dir = (random(0,9)<=4)? -1 : 1;
         this.speedY = dir * random(3,4) * speedfactor;
         this.initSpeedX =  this.speedX;
-        this.pos = createVector( random(this.r,width-this.r),random(this.r,height-this.r));
+        let xMin = fieldWith/2 - fieldInnerLineCircleRadius + this.r;
+        let xMax = fieldWith/2 + fieldInnerLineCircleRadius - this.r;
+        let yMin = fieldHeigth/2 - fieldInnerLineCircleRadius + this.r;
+        let yMax = fieldHeigth/2 + fieldInnerLineCircleRadius - this.r;
+        this.pos = createVector( random(xMin, xMax),random(yMin, yMax));
         this.field = field;
     }
 
@@ -49,8 +53,14 @@ class Ball{
                     }else{
                         this.goSlower();
                     }
-                    if(platform.left)   this.goRight();
-                    else                this.goLeft();
+                    if(platform.left){
+                        platform.pushLeft(this.speedX);
+                        this.goRight();
+                    }   
+                    else{
+                        platform.pushRight(this.speedX);
+                        this.goLeft();
+                    }   
 
                 }
                 if(this.touchesPlatformOuter(platform)){
@@ -59,34 +69,47 @@ class Ball{
                     }else{
                         this.goSlower();
                     }
-                    if(platform.left)   this.goLeft();
-                    else                this.goRight();
+                    if(platform.left){
+                        platform.pushRight(this.speedX);
+                        this.goLeft();
+                    }
+                    else{
+                        console.log("this.speedx=",this.speedX);
+                        platform.pushLeft(this.speedX);
+                        this.goRight();
+                    }
 
                 }
             }else{
                 if(this.touchesPlatformInner(platform)){
                     if(platform.isMovingInwards()){
-                        if(platform.left)   this.stickRight();
-                        else                 this.stickLeft();
+                        if(platform.left){
+                            this.stickRight();
+                        }
+                        else{
+                            this.stickLeft();
+                        }
                     }
                 }
                 if(this.touchesPlatformOuter(platform)){
                     if(platform.isMovingOutwards()){
-                        if(platform.left)   this.stickLeft();
-                        else                 this.stickRight();
+                        if(platform.left){
+                            this.stickLeft();
+                        }
+                        else{
+                            this.stickRight();
+                        }
                     }
                 }
             }
 
             if(this.approachesY(platform)){
                 if(this.touchesPlatformBottom(platform)){
-                    console.log("CHANGING Y in plat Bot");
-                    //this.changeYdir();
+                    platform.pushUp(this.speedY);
                     this.goDown();
                 }
                 if(this.touchesPlatformTop(platform)){
-                    console.log("CHANGING Y in plat Top");
-                    //this.changeYdir();
+                    platform.pushDown(this.speedY);
                     this.goUp();
                 }
             }
@@ -102,8 +125,10 @@ class Ball{
     }
 
     pause(){
-        this.speedXWas = this.speedX;
-        this.speedYWas = this.speedY;
+        if(this.speedX != 0){
+            this.speedXWas = this.speedX;
+            this.speedYWas = this.speedY;
+        }
         this.speedX = 0;
         this.speedY = 0;
     }
@@ -113,22 +138,10 @@ class Ball{
         this.speedY = this.speedYWas;
     }
 
-    touchesWall(w,h){
-        return (this.touchesBottomWall(h) || this.touchesLeftWall() || this.touchesRightWall(w) || this.touchesTopWall())
-    }
-
-    touchesTopWall(){
-        if(this.pos.y <= this.r) return true;
-    }
-    touchesBottomWall(h){
-        if(this.pos.y >= h-this.r) return true;
-    }
-    touchesLeftWall(){
-        if(this.pos.x <= this.r) return true;
-    }
-    touchesRightWall(w){
-        if(this.pos.x >= w-this.r) return true;
-    }
+    touchesTopWall(){ if(this.pos.y <= this.r) return true;}
+    touchesBottomWall(h){ if(this.pos.y >= h-this.r) return true;}
+    touchesLeftWall(){ if(this.pos.x <= this.r) return true;  }
+    touchesRightWall(w){ if(this.pos.x >= w-this.r) return true; }
 
     touchesPlatformInner(platform){
         var it = platform.getInnerTop();
@@ -199,63 +212,39 @@ class Ball{
 
     }
 
-    goLeft(){
-        this.speedX = abs(this.speedX) * -1;
-    }
+    goLeft(){ this.speedX = abs(this.speedX) * -1;}
+    goRight(){ this.speedX = abs(this.speedX);}
+    goUp(){this.speedY = abs(this.speedY) * -1; }
+    goDown(){ this.speedY = abs(this.speedY);}
     stickLeft(platform){
         if(!(platform instanceof Platform)) return;
         this.pos.x = platform.getTopLeft().x - this.r;
-    }
-
-    goRight(){
-        this.speedX = abs(this.speedX);
     }
     stickRight(platform){
         if(!(platform instanceof Platform)) return;
         this.pos.x = platform.getTopRight().x + this.r;
     }
-
-
-    goUp(){
-        this.speedY = abs(this.speedY) * -1;
-    }
     stickUp(platform){
         if(!(platform instanceof Platform)) return;
         this.pos.y = platform.getInnerTop().y - this.r;
-    }
-
-    goDown(){
-        this.speedY = abs(this.speedY);
     }
     stickDown(platform){
         if(!(platform instanceof Platform)) return;
         this.pos.y = platform.getOuterBottom().y + this.r;
     }
 
-    goFaster(){
-        this.speedX *= 1.3;
-    }
+    goFaster(){this.speedX *= 1.3;}
     goSlower(){
-        if(abs(this.speedX) > abs(this.initSpeedX)){
-            this.speedX /= 1.3;
-        }
+        if(abs(this.speedX) > abs(this.initSpeedX)) this.speedX /= 1.3;
     }
 
-    goesLeft(){
-        return (this.speedX < 0);
-    }
-    goesUp(){
-        return (this.speedY < 0);
-    }
-    goesDown(){
-        return (this.speedY > 0);
-    }
-    goesRight(){
-        return (this.speedX > 0);
-    }
+    goesLeft(){return (this.speedX < 0);}
+    goesUp(){return (this.speedY < 0);}
+    goesRight(){ return (this.speedX > 0);}
+    goesDown(){return (this.speedY > 0);}
 }
 
 function addWaveAt(x, y, radius, strkclr){
-    waves.splice(5,1);
+    waves.splice(20,1);
     waves.unshift(new Wave(x, y, radius, strkclr));
 }

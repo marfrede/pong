@@ -1,8 +1,13 @@
+let timesToPush = 10;
+let reductionFactor = 0.95;
+
 class Platform{
     constructor(side, speed, platfW, platfH){
         this.w = platfW;
         this.h = platfH;
         this.speed = speed;
+        this.pushSpeed = [0,0,0,0]; //left right up down
+        this.pushCounter = [0,0,0,0];
 
         var y = random(this.h/2, height - this.h/2);
         if(side === "left"){
@@ -43,10 +48,13 @@ class Platform{
             if(keyIsDown(DOWN_ARROW)) this.moveDown(height);
             
         }
+        this.push();
     }
 
     pause(){
-        this.speedWas = this.speed;
+        if(this.speed != 0){
+            this.speedWas = this.speed;
+        }
         this.speed = 0;
     }
 
@@ -77,6 +85,60 @@ class Platform{
     moveDown(height){
         var posy = this.pos.y + this.speed;
         if(posy <= height - this.h/2) this.pos.y = posy;
+    }
+
+    push(){
+        if(this.pushCounter[0] > 0){
+            let posx = this.pos.x + this.pushSpeed[0];
+            if(this.left){     
+                if(posx >= this.w/2) this.pos.x = posx;
+            }else{
+                if(posx >= this.boundaryX + this.w/2) this.pos.x = posx;
+            }
+            this.pushCounter[0]--;
+            this.pushSpeed[0] *= reductionFactor;
+            
+        }
+        if(this.pushCounter[1] > 0){
+            let posx = this.pos.x + this.pushSpeed[1]; 
+            if(this.left){     
+                if(posx <= this.boundaryX - this.w/2) this.pos.x = posx;
+            }else{
+                if(posx <= width - this.w/2) this.pos.x = posx;
+            }
+            this.pushCounter[1]--;
+            this.pushSpeed[1] *= reductionFactor; 
+        }
+        if(this.pushCounter[2] > 0){
+            let posy = this.pos.y + this.pushSpeed[2]; 
+            if(posy >= this.h/2) this.pos.y = posy;
+            this.pushCounter[2]--;
+            this.pushSpeed[2] *= reductionFactor; 
+        }
+        if(this.pushCounter[3] > 0){
+            let posy = this.pos.y + this.pushSpeed[3]; 
+            if(posy <= height - this.h/2) this.pos.y = posy;
+            this.pushCounter[3]--;
+            this.pushSpeed[3] *= reductionFactor; 
+        }
+        
+    }
+
+    pushLeft(ballxspeed){
+        this.pushCounter[0] = timesToPush;
+        this.pushSpeed[0] = ballxspeed;
+    }
+    pushRight(ballxspeed){
+        this.pushCounter[1] = timesToPush;
+        this.pushSpeed[1] = ballxspeed;
+    }
+    pushUp(ballyspeed){
+        this.pushCounter[2] = timesToPush;
+        this.pushSpeed[2] = ballyspeed;
+    }
+    pushDown(ballyspeed){
+        this.pushCounter[3] = timesToPush;
+        this.pushSpeed[3] = ballyspeed;
     }
 
     getTopLeft(){
