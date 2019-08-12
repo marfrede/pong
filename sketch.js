@@ -111,6 +111,9 @@ function keyPressed(){
 function addBall(){
     balls.unshift(new Ball(ballRadius, ballSpeed));
 }
+function removeBall(){
+    balls.splice(0,1);
+}
 function addPlatform(leftOrRight){
     platforms.unshift(new Platform(leftOrRight, platformSpeed, platformWidth, platformHeight));
     return;
