@@ -1,11 +1,18 @@
+
+
 class Wave{
     constructor(posx,posy,radius,strokeclr){
         this.pos = createVector(posx,posy);
-        this.r = radius;
+        this.r = radius/3;
         this.color = strokeclr;
         
         this.strikeStroke = false;
         this.alpha = 255;
+
+        this.minR = radius;
+        this.maxR = radius * 3;
+
+        if(posx == 0) console.log("radius=",this.maxR);
     }
 
     show(){
@@ -22,11 +29,11 @@ class Wave{
     }
 
     update(){
-        this.alpha = map(this.r, 15, 50, 255, 0)
-        if(this.r >= 50){
+        this.alpha = map(this.r, this.minR, this.maxR, 255, 0)
+        if(this.r >= this.maxR){
             this.strikeStroke = true;
         }
-        this.r++;
+        this.r+=this.maxR*(1/35);
     }
 
 }

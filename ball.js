@@ -1,6 +1,6 @@
 class Ball{
     constructor(radius,speedfactor){
-        this.r = radius;
+        this.r = random(radius-radius*1/3,radius+radius*1/3);
         var dir = (random(0,9)<=4)? -1 : 1;
         this.speedX = dir * random(4,5) * speedfactor; 
         dir = (random(0,9)<=4)? -1 : 1;
@@ -26,22 +26,24 @@ class Ball{
         this.pos.y += this.speedY;
 
         if(this.touchesLeftWall()){
-            addWaveAt(0, this.pos.y, waveRadius, fieldDangerLinesClr);
+            addWaveAt(0, this.pos.y, this.r + this.r * 1/2, fieldDangerLinesClr);
             this.goRight();
+            rightScores();
         }
 
         if(this.touchesRightWall(width)){
-            addWaveAt(width, this.pos.y,  waveRadius, fieldDangerLinesClr)
+            addWaveAt(width, this.pos.y,  this.r + this.r * 1/2, fieldDangerLinesClr)
             this.goLeft();
+            leftScores();
         }
 
         if(this.touchesTopWall()){
-            addWaveAt(this.pos.x, 0, waveRadius, fieldSideLinesClr);
+            addWaveAt(this.pos.x, 0, this.r + this.r * 1/2, fieldSideLinesClr);
             this.goDown();
         }
 
         if(this.touchesBottomWall(height)){
-            addWaveAt(this.pos.x, height,  waveRadius, fieldSideLinesClr);
+            addWaveAt(this.pos.x, height,  this.r + this.r * 1/2, fieldSideLinesClr);
             this.goUp();
         }
 

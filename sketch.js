@@ -1,4 +1,5 @@
-let offsetgraphic;
+let countdownBoard;
+let scoreBoard;
 
 var field;
 var waves;
@@ -35,13 +36,12 @@ var fieldSideLinesThickness = 10;           //      10
 
 
 
-//waves
-var waveRadius = 15;                        //      15
 
 //ball
-var numberOfBalls = 1;                      //      1
-var ballRadius = 12;                        //      12
+var numberOfBalls = 2;                      //      1
+var ballRadius = 20;                        //      12
 var ballSpeed = 0.7;                        //      0.7
+
 
 //platforms
 var numberOfPlatformsPerSide = 1;           //      1
@@ -57,8 +57,10 @@ function setup() {
     frameRate(framerate);
     createCanvas(fieldWith,fieldHeigth);
 
-    offsetgraphic = createGraphics(width, height);
-    offsetgraphic.clear();
+    countdownBoard = createGraphics(width, height);
+    countdownBoard.clear();
+    scoreBoard = createGraphics(width, height);
+    scoreBoard.clear();
 
     field = new Field();
     balls = [];
@@ -93,7 +95,8 @@ function draw() {
         wave.update();
     });
 
-    countdown();
+    //countdown();
+    showScore();
 }
 
 function keyPressed(){
@@ -142,21 +145,50 @@ var timer = 3;
 function countdown(){
     if(timer > 0){
         pause();
-        image(offsetgraphic,0,0);
+        image(countdownBoard,0,0);
     
         if(frameCount % 60 == 0 && timer >= 0){
-            offsetgraphic.clear();
+            countdownBoard.clear();
             timer--;
         }
-        offsetgraphic.textAlign(CENTER,CENTER);
-        offsetgraphic.fill(255,0,0);
-        offsetgraphic.textSize(height/6);
+        countdownBoard.textAlign(CENTER,CENTER);
+        countdownBoard.fill(255,0,0);
+        countdownBoard.textSize(fieldHeigth/6);
         if(timer > 0){
-            offsetgraphic.text(timer,width/2,height/2);
+            countdownBoard.text(timer,fieldWidth/2,fieldHeigth/2);
         }
         if(timer == 0){
-            offsetgraphic.text("START",width/2,height/2);
+            countdownBoard.text("START",fieldWidth/2,fieldHeigth/2);
             resume();
         }
     }
+}
+
+var scoreLeft = 0;
+var scoreRigth = 0;
+function showScore(){
+    image(scoreBoard,0,0);
+    scoreBoard.textAlign(CENTER, CENTER);
+    scoreBoard.fill(10,90,30,30);
+    scoreBoard.textSize(fieldHeigth/18);
+    scoreBoard.text(scoreLeft,fieldWith/15,fieldHeigth - fieldHeigth/15);
+    scoreBoard.text(scoreRigth,fieldWith - fieldWith/15,fieldHeigth - fieldHeigth/15);
+}
+
+function leftScores(){
+    scoreBoard.textAlign(CENTER, CENTER);
+    scoreBoard.fill(10,90,30,30);
+    scoreBoard.textSize(fieldHeigth/18);
+    scoreBoard.clear();
+    scoreBoard.text(++scoreLeft,fieldWith/15,fieldHeigth - fieldHeigth/15);
+    scoreBoard.text(scoreRigth,fieldWith - fieldWith/15,fieldHeigth - fieldHeigth/15);
+}
+
+function rightScores(){
+    scoreBoard.textAlign(CENTER, CENTER);
+    scoreBoard.fill(10,90,30,30);
+    scoreBoard.textSize(fieldHeigth/18);
+    scoreBoard.clear();
+    scoreBoard.text(scoreLeft,fieldWith/15,fieldHeigth - fieldHeigth/15);
+    scoreBoard.text(++scoreRigth,fieldWith - fieldWith/15,fieldHeigth - fieldHeigth/15);
 }
