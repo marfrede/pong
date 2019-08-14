@@ -65,7 +65,7 @@ class Ball{
                     }   
                     var newMin = this.speedY - 2;
                     var newMax = this.speedY + 2;
-                    this.speedY = random(newMin, newMax); 
+                    this.speedY = constrain(random(newMin, newMax),2,5); 
 
                 }
                 if(this.touchesPlatformOuter(platform)){
