@@ -39,7 +39,7 @@ var fieldSideLinesThickness = 10;           //      10
 
 //ball
 var numberOfBalls = 2;                      //      1
-var ballRadius = 20;                        //      12
+var ballRadius = 12;                        //      12
 var ballSpeed = 0.7;                        //      0.7
 
 
