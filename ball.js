@@ -1,5 +1,6 @@
 class Ball{
     constructor(radius,speedfactor){
+        this.paused = false;
         this.r = random(radius-radius*1/3,radius+radius*1/3);
         var dir = (random(0,9)<=4)? -1 : 1;
         this.speedX = dir * random(4,5) * speedfactor; 
@@ -22,6 +23,8 @@ class Ball{
     }
 
     update(){ 
+        if(!this.paused){
+
         this.pos.x += this.speedX;
         this.pos.y += this.speedY;
 
@@ -126,20 +129,16 @@ class Ball{
                 }
             }
         });
+
+        }
     }
 
     pause(){
-        if(this.speedX != 0){
-            this.speedXWas = this.speedX;
-            this.speedYWas = this.speedY;
-        }
-        this.speedX = 0;
-        this.speedY = 0;
+        this.paused = true;
     }
 
     resume(){
-        this.speedX = this.speedXWas;
-        this.speedY = this.speedYWas;
+        this.paused = false;
     }
 
     setNewRandomSpeedY(){

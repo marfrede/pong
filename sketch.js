@@ -129,6 +129,9 @@ function pause(){
     platforms.forEach(platform => {
         platform.pause();
     });
+    waves.forEach(wave => {
+        wave.pause();
+    });
 }
 
 function resume(){
@@ -138,6 +141,9 @@ function resume(){
     });
     platforms.forEach(platform => {
         platform.resume();
+    });
+    waves.forEach(wave => {
+        wave.resume();
     });
 }
 
