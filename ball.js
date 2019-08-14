@@ -63,6 +63,9 @@ class Ball{
                         platform.pushRight(this.speedX);
                         this.goLeft();
                     }   
+                    var newMin = this.speedY - 2;
+                    var newMax = this.speedY + 2;
+                    this.speedY = random(newMin, newMax); 
 
                 }
                 if(this.touchesPlatformOuter(platform)){
