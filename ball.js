@@ -256,7 +256,9 @@ class Ball{
         this.pos.y = platform.getOuterBottom().y + this.r;
     }
 
-    goFaster(){this.speedX *= 1.3;}
+    goFaster(){
+        this.speedX *= 1.8;
+    }
     goSlower(){
         if(abs(this.speedX) > abs(this.initSpeedX)) this.speedX /= 1.3;
     }
