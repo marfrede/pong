@@ -1,5 +1,6 @@
 let countdownBoard;
-let scoreBoard;
+let leftScoreBoard;
+let rightScoreBoard;
 
 var field;
 var waves;
@@ -16,8 +17,8 @@ var countFrom = 3;                          //      3
 
 //field
 var backgroundClr = 0;                      //      0
-var fieldWith = 700;                        //      700
-var fieldHeigth = 350;                      //      350
+var fieldWidth = 700;                        //      700
+var fieldHeight = 350;                      //      350
 
 var boxSpace = 1/5;//percentage of width    //      1/5
 
@@ -55,12 +56,14 @@ function setup() {
 
     //setting up
     frameRate(framerate);
-    createCanvas(fieldWith,fieldHeigth);
+    createCanvas(fieldWidth,fieldHeight);
 
     countdownBoard = createGraphics(width, height);
     countdownBoard.clear();
-    scoreBoard = createGraphics(width, height);
-    scoreBoard.clear();
+    leftScoreBoard = createGraphics(width, height);
+    leftScoreBoard.clear();
+    rightScoreBoard = createGraphics(width, height);
+    rightScoreBoard.clear();
 
     field = new Field();
     balls = [];
@@ -159,42 +162,44 @@ function countdown(){
         }
         countdownBoard.textAlign(CENTER,CENTER);
         countdownBoard.fill(255,0,0);
-        countdownBoard.textSize(fieldHeigth/6);
+        countdownBoard.textSize(fieldHeight/6);
         if(timer > 0){
-            countdownBoard.text(timer,fieldWidth/2,fieldHeigth/2);
+            countdownBoard.text(timer,fieldWidth/2,fieldHeight/2);
         }
         if(timer == 0){
-            countdownBoard.text("START",fieldWidth/2,fieldHeigth/2);
+            countdownBoard.text("START",fieldWidth/2,fieldHeight/2);
             resume();
         }
     }
 }
-
-var scoreLeft = 0;
-var scoreRigth = 0;
+var scoreClr = [255,0,0,30];
+var hitsOnLeft = 0;
+var hitsOnRight = 0;
 function showScore(){
-    image(scoreBoard,0,0);
-    scoreBoard.textAlign(CENTER, CENTER);
-    scoreBoard.fill(10,90,30,30);
-    scoreBoard.textSize(fieldHeigth/18);
-    scoreBoard.text(scoreLeft,fieldWith/15,fieldHeigth - fieldHeigth/15);
-    scoreBoard.text(scoreRigth,fieldWith - fieldWith/15,fieldHeigth - fieldHeigth/15);
+    image(leftScoreBoard,0,0);
+    image(rightScoreBoard,0,0);
+    leftScoreBoard.textAlign(CENTER, CENTER);
+    leftScoreBoard.fill(scoreClr);
+    leftScoreBoard.textSize(fieldHeight/18);
+    leftScoreBoard.text(hitsOnLeft,fieldWidth/15,fieldHeight - fieldHeight/15);
+    rightScoreBoard.textAlign(CENTER, CENTER);
+    rightScoreBoard.fill(scoreClr);
+    rightScoreBoard.textSize(fieldHeight/18);
+    rightScoreBoard.text(hitsOnRight,fieldWidth - fieldWidth/15,fieldHeight - fieldHeight/15);
 }
 
-function leftScores(){
-    scoreBoard.textAlign(CENTER, CENTER);
-    scoreBoard.fill(10,90,30,30);
-    scoreBoard.textSize(fieldHeigth/18);
-    scoreBoard.clear();
-    scoreBoard.text(++scoreLeft,fieldWith/15,fieldHeigth - fieldHeigth/15);
-    scoreBoard.text(scoreRigth,fieldWith - fieldWith/15,fieldHeigth - fieldHeigth/15);
+function hitsLeft(){
+    leftScoreBoard.textAlign(CENTER, CENTER);
+    leftScoreBoard.fill(scoreClr);
+    leftScoreBoard.textSize(fieldHeight/18);
+    leftScoreBoard.clear();
+    leftScoreBoard.text(++hitsOnLeft,fieldWidth/15,fieldHeight - fieldHeight/15);
 }
 
-function rightScores(){
-    scoreBoard.textAlign(CENTER, CENTER);
-    scoreBoard.fill(10,90,30,30);
-    scoreBoard.textSize(fieldHeigth/18);
-    scoreBoard.clear();
-    scoreBoard.text(scoreLeft,fieldWith/15,fieldHeigth - fieldHeigth/15);
-    scoreBoard.text(++scoreRigth,fieldWith - fieldWith/15,fieldHeigth - fieldHeigth/15);
+function hitsRight(){
+    rightScoreBoard.textAlign(CENTER, CENTER);
+    rightScoreBoard.fill(scoreClr);
+    rightScoreBoard.textSize(fieldHeight/18);
+    rightScoreBoard.clear();
+    rightScoreBoard.text(++hitsOnRight,fieldWidth - fieldWidth/15,fieldHeight - fieldHeight/15);
 }

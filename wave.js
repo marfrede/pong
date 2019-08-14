@@ -13,8 +13,6 @@ class Wave{
 
         this.minR = radius;
         this.maxR = radius * 3;
-
-        if(posx == 0) console.log("radius=",this.maxR);
     }
 
     show(){
