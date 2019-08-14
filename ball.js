@@ -28,12 +28,14 @@ class Ball{
         if(this.touchesLeftWall()){
             addWaveAt(0, this.pos.y, this.r + this.r * 1/2, fieldDangerLinesClr);
             this.goRight();
+            this.goSlower();
             rightScores();
         }
 
         if(this.touchesRightWall(width)){
             addWaveAt(width, this.pos.y,  this.r + this.r * 1/2, fieldDangerLinesClr)
             this.goLeft();
+            this.goSlower();
             leftScores();
         }
 
@@ -63,9 +65,6 @@ class Ball{
                         platform.pushRight(this.speedX);
                         this.goLeft();
                     }   
-                    var newMin = this.speedY - 2;
-                    var newMax = this.speedY + 2;
-                    this.speedY = constrain(random(newMin, newMax),2,5); 
 
                 }
                 if(this.touchesPlatformOuter(platform)){
@@ -143,6 +142,15 @@ class Ball{
         this.speedY = this.speedYWas;
     }
 
+    setNewRandomSpeedY(){
+        var newSpeedY = random(-4,+4);
+        if(newSpeedY < 0){
+            this.speedY = constrain(newSpeedY,-4,-2);
+        }else{
+            this.speedY = constrain(newSpeedY,2,4);
+        }
+    }
+
     touchesTopWall(){ if(this.pos.y <= this.r) return true;}
     touchesBottomWall(h){ if(this.pos.y >= h-this.r) return true;}
     touchesLeftWall(){ if(this.pos.x <= this.r) return true;  }
@@ -217,10 +225,20 @@ class Ball{
 
     }
 
-    goLeft(){ this.speedX = abs(this.speedX) * -1;}
-    goRight(){ this.speedX = abs(this.speedX);}
-    goUp(){this.speedY = abs(this.speedY) * -1; }
-    goDown(){ this.speedY = abs(this.speedY);}
+    goLeft(){ 
+        this.speedX = abs(this.speedX) * -1;
+        this.setNewRandomSpeedY();
+    }
+    goRight(){
+        this.speedX = abs(this.speedX);
+        this.setNewRandomSpeedY();
+    }
+    goUp(){
+        this.speedY = abs(this.speedY) * -1;
+    }
+    goDown(){
+        this.speedY = abs(this.speedY);
+    }
     stickLeft(platform){
         if(!(platform instanceof Platform)) return;
         this.pos.x = platform.getTopLeft().x - this.r;
