@@ -2,30 +2,44 @@
 class Ball{
 
     //CONSTRUCTOR
-    constructor(radius,speedfactor){
+    constructor(radius,speedfactor,lifetime = -1){
         this.r = this.setRadius(radius, (1/5));
         this.pos = this.setStartPosition();
         this.speedX = oneOrMinusOne() * random(4.2,4.8) * speedfactor; 
         this.speedY = oneOrMinusOne() * random(3.2,3.8) * speedfactor;
         this.minimumSpeed =  this.speedX;
+        this.lifetime = lifetime;
+        this.origLifeTime = lifetime;
     }
 
     //SHOW
     show(){
         ellipseMode(CENTER);
-        fill(255,246,143);
+        let alpha_ = map(this.lifetime, 0, this.origLifeTime, 30, 255);
+        let clrs = ballClr;
+        clrs[3] = alpha_;
         noStroke(); 
+        fill(clrs);
+        if(this.lifetime == 0){
+            fill(255,0,0);
+            ellipse(this.pos.x, this.pos.y, this.r*8, this.r*8);
+            addWaveAt(this.pos.x,this.pos.y,this.r*8,ballClr);
+        }
         ellipse(this.pos.x, this.pos.y, this.r*2, this.r*2);
+
     }
 
     //UPDATE
     update(){ 
+
+        
 
         //normal movement
         this.pos.x += this.speedX;
         this.pos.y += this.speedY;
 
         if(this.touchesLeftWall()){
+            this.decrLifetime();;
             hitsLeft();
             addWaveAt(0, this.pos.y, this.r + this.r * 1/2, fieldDangerLinesClr);
             this.goRight();
@@ -33,6 +47,7 @@ class Ball{
         }
 
         if(this.touchesRightWall(fieldWidth)){
+            this.decrLifetime();;
             hitsRight();
             addWaveAt(fieldWidth, this.pos.y,  this.r + this.r * 1/2, fieldDangerLinesClr)
             this.goLeft();
@@ -40,11 +55,13 @@ class Ball{
         }
 
         if(this.touchesTopWall()){
+            this.decrLifetime();;
             addWaveAt(this.pos.x, 0, this.r + this.r * 1/2, fieldSideLinesClr);
             this.goDown();
         }
 
         if(this.touchesBottomWall(fieldHeight)){
+            this.decrLifetime();;
             addWaveAt(this.pos.x, fieldHeight,  this.r + this.r * 1/2, fieldSideLinesClr);
             this.goUp();
         }
@@ -52,6 +69,7 @@ class Ball{
         platforms.forEach(platform => {
             if(this.approachesX(platform)){
                 if(this.touchesPlatformInner(platform)){
+                    this.decrLifetime();;
                     if(platform.isMovingInwards()){
                         this.goFaster();
                     }else{
@@ -68,6 +86,7 @@ class Ball{
 
                 }
                 if(this.touchesPlatformOuter(platform)){
+                    this.decrLifetime();;
                     if(platform.isMovingOutwards()){
                         this.goFaster();
                     }else{
@@ -85,6 +104,7 @@ class Ball{
                 }
             }else{
                 if(this.touchesPlatformInner(platform)){
+                    this.decrLifetime();;
                     if(platform.isMovingInwards()){
                         if(platform.left){
                             this.stickRight();
@@ -95,6 +115,7 @@ class Ball{
                     }
                 }
                 if(this.touchesPlatformOuter(platform)){
+                    this.decrLifetime();;
                     if(platform.isMovingOutwards()){
                         if(platform.left){
                             this.stickLeft();
@@ -108,23 +129,29 @@ class Ball{
 
             if(this.approachesY(platform)){
                 if(this.touchesPlatformBottom(platform)){
+                    this.decrLifetime();;
                     platform.pushUp(this.speedY);
                     this.goDown();
                 }
                 if(this.touchesPlatformTop(platform)){
+                    this.decrLifetime();;
                     platform.pushDown(this.speedY);
                     this.goUp();
                 }
             }
             else{
                 if(this.touchesPlatformBottom(platform)){
+                    this.decrLifetime();;
                     this.stickDown(platform);
                 }
                 if(this.touchesPlatformTop(platform)){
+                    this.decrLifetime();;
                     this.stickUp(platform);
                 }
             }
         });
+
+        
     }
     
     //SETTER
@@ -148,6 +175,10 @@ class Ball{
         }else{
             this.speedY = constrain(newSpeedY,2,4);
         }
+    }
+
+    decrLifetime(){
+        if(this.lifetime > 0 ) this.lifetime--;
     }
 
     //CHANGER
@@ -189,6 +220,9 @@ class Ball{
         if(abs(this.speedX) > abs(this.minimumSpeed)){
             this.speedX /= 1.3;
         } 
+    }
+    explode(){
+        this.exploding = true;
     }
 
     //GETTER - NON CHANGING

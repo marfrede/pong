@@ -40,7 +40,8 @@ let fieldSideLinesThickness = 10;           //      10
 
 
 //ball
-let numberOfBalls = 2;                      //      1
+let ballClr = [255,246,143];                //      255,246,143
+let numberOfBalls = 1;                      //      1
 let ballRadius = 12;                        //      12
 let ballSpeed = 0.7;                        //      0.7
 
@@ -95,9 +96,12 @@ function draw() {
     
         field.show();
     
-        balls.forEach(ball => {
-            ball.show();
+        balls.forEach((ball, index) => {
             ball.update();
+            if(ball.lifetime == 0){
+                balls.splice(index,1);
+            }
+            ball.show();
         });
         platforms.forEach(platform => {
             platform.show();
@@ -127,7 +131,7 @@ function addPlatform(leftOrRight){
 let timer = 3;
 function countdown(){
     if(timer > 0){
-        pause();
+        this.paused = true;
         image(countdownBoard,0,0);
     
         if(frameCount % 60 == 0 && timer >= 0){
@@ -142,13 +146,15 @@ function countdown(){
         }
         if(timer == 0){
             countdownBoard.text("START",fieldWidth/2,fieldHeight/2);
-            resume();
+            this.paused = false;
         }
     }
 }
 let scoreClr = [255,0,0,30];
 let hitsOnLeft = 0;
 let hitsOnRight = 0;
+let leftLives = 150;
+let rightLives = 150;
 function showScore(){
     image(leftScoreBoard,0,0);
     image(rightScoreBoard,0,0);
@@ -163,17 +169,21 @@ function showScore(){
 }
 
 function hitsLeft(){
+    leftLives--;
+    hitsOnLeft++;
     leftScoreBoard.textAlign(CENTER, CENTER);
     leftScoreBoard.fill(scoreClr);
     leftScoreBoard.textSize(fieldHeight/18);
     leftScoreBoard.clear();
-    leftScoreBoard.text(++hitsOnLeft,fieldWidth/15,fieldHeight - fieldHeight/15);
+    leftScoreBoard.text(hitsOnLeft,fieldWidth/15,fieldHeight - fieldHeight/15);
 }
 
 function hitsRight(){
+    rightLives--;
+    hitsOnRight++;
     rightScoreBoard.textAlign(CENTER, CENTER);
     rightScoreBoard.fill(scoreClr);
     rightScoreBoard.textSize(fieldHeight/18);
     rightScoreBoard.clear();
-    rightScoreBoard.text(++hitsOnRight,fieldWidth - fieldWidth/15,fieldHeight - fieldHeight/15);
+    rightScoreBoard.text(hitsOnRight,fieldWidth - fieldWidth/15,fieldHeight - fieldHeight/15);
 }

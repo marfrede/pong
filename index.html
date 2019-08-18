@@ -7,6 +7,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
     <title>PONG</title>
 
+    <link rel="stylesheet" href="./style.css">
+
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -27,7 +29,7 @@
     <div id="contrArea">
       <!-- BALLS -->
       <div class="d-flex flex-row">
-          <h1 class="p-2">Balls</h1>
+          <h3 class="p-2">Balls</h3>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
             <button onClick="addBall()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
             <h1 id="ballNr"></h1>
@@ -37,7 +39,7 @@
   
       <!-- FIELD -->
       <div class="d-flex flex-row">
-          <h1 class="p-2">Field</h1>
+          <h3 class="p-2">Field</h3>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
             <button onClick="moreWidth()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
             <h1 id="fW"></h1>
@@ -52,6 +54,56 @@
             <button onClick="defaultField()" type="button" class="btn btn-secondary btn-sm"><h3>standard</h3></button>
           </div>
       </div>
+  
+      <!-- PLATFORMS -->
+      <div class="d-flex flex-row">
+          <h3 class="p-2">Platform L</h3>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="morePlHeight(true)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <h1 id="pllh"></h1>
+            <button onClick="lessPlHeight(true)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+          </div>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="morePlWidth(true)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <h1 id="pllw"></h1>
+            <button onClick="lessPlWidth(true)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+          </div>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="defaultPlatform(true)" type="button" class="btn btn-secondary btn-sm"><h3>standard</h3></button>
+          </div>
+      </div>
+
+      <div class="d-flex flex-row">
+          <h3 class="p-2">Platform R</h3>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="morePlHeight(false)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <h1 id="plrh"></h1>
+            <button onClick="lessPlHeight(false)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+          </div>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="morePlWidth(false)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <h1 id="plrw"></h1>
+            <button onClick="lessPlWidth(false)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+          </div>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="defaultPlatform(false)" type="button" class="btn btn-secondary btn-sm"><h3>standard</h3></button>
+          </div>
+      </div>
+  
+      <!-- SCORE -->
+      <div id="scoreboard" class="d-flex flex-row">
+          <h3 class="p-2">Lives</h3>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <img width="35" height="35" src="./heart.png">
+            <h1 id="leftscore"></h1>
+          </div>
+          <h1 class="p-2">:</h1>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+              <img width="35" height="35" src="./heart.png">
+            <h1 id="rightscore"></h1>
+          </div>
+      </div>
+
     </div>
   </body>
 </html>
