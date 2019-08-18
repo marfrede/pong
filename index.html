@@ -3,20 +3,55 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PONG</title>
+
     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
-    <style> body {padding: 0; margin: 0;} </style>
+    <title>PONG</title>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    >
+
     <script src="p5.min.js"></script>
     <!--<script src="../../../src/p5/addons/p5.dom.js"></script>-->
-
     <script src="field.js"></script>
     <script src="ball.js"></script>
     <script src="platform.js"></script>
     <script src="wave.js"></script>
+    <script src="buttons.js"></script>
     <script src="sketch.js"></script>
   </head>
   <body>
-    <button onClick="addBall()">Add Ball</button>
-    <button onClick="removeBall()">Remove Ball</button>
+    <div id="contrArea">
+      <!-- BALLS -->
+      <div class="d-flex flex-row">
+          <h1 class="p-2">Balls</h1>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="addBall()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <h1 id="ballNr"></h1>
+            <button onClick="removeBall()" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+          </div>
+      </div>
+  
+      <!-- FIELD -->
+      <div class="d-flex flex-row">
+          <h1 class="p-2">Field</h1>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="moreWidth()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <h1 id="fW"></h1>
+            <button onClick="lessWidth()" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+          </div>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="moreHeight()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <h1 id="fH"></h1>
+            <button onClick="lessHeight()" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+          </div>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="defaultField()" type="button" class="btn btn-secondary btn-sm"><h3>standard</h3></button>
+          </div>
+      </div>
+    </div>
   </body>
 </html>

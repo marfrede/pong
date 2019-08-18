@@ -2,155 +2,129 @@ let countdownBoard;
 let leftScoreBoard;
 let rightScoreBoard;
 
-var field;
-var waves;
-var balls;
-var platforms;
+let field;
+let waves;
+let balls;
+let platforms;
 
-var framerate = 120;                        //  120
+let framerate = 120;                        //  120
 
-var paused = false;
+let paused = false;
 
 //INITIALIZING                              //  STD VALUES
 //countdown
-var countFrom = 3;                          //      3
+let countFrom = 3;                          //      3
 
 //field
-var backgroundClr = 0;                      //      0
-var fieldWidth = 700;                        //      700
-var fieldHeight = 350;                      //      350
+let backgroundImg;
+let backgroundClr = 0;                      //      0
+let fieldWidth = 700;                       //      700
+let fieldHeight = 350;                      //      350
 
-var boxSpace = 1/5;//percentage of width    //      1/5
+let boxSpace = 1/5;//percentage of width    //      1/5
 
-var fieldInnerLineColor = [10,20,30];       //      30,20,10
-var fieldInnerLineCircleRadius = 70;        //      70
-var fieldInnerLineThicknes = 3;             //      3
+let fieldInnerLineColor = [10,20,30];       //      30,20,10
+let fieldInnerLineCircleRadius = 70;        //      70
+let fieldInnerLineThicknes = 3;             //      3
 
-var fieldBoxLinesClr = [100,100,100];       //      100,100,100
-var fieldBoxLineThickness = 2;              //      2
+let fieldBoxLinesClr = [100,100,100];       //      100,100,100
+let fieldBoxLineThickness = 2;              //      2
 
-var fieldDangerLinesClr = [255,0,0];        //      255,0,0
-var fieldDangerLinesThickness = 10;         //      10
+let fieldDangerLinesClr = [255,0,0];        //      255,0,0
+let fieldDangerLinesThickness = 10;         //      10
 
-var fieldSideLinesClr = [10,255,150]         //      10,20,150
-var fieldSideLinesThickness = 10;           //      10
+let fieldSideLinesClr = [10,255,150]         //      10,20,150
+let fieldSideLinesThickness = 10;           //      10
 
 
 
 
 //ball
-var numberOfBalls = 2;                      //      1
-var ballRadius = 12;                        //      12
-var ballSpeed = 0.7;                        //      0.7
+let numberOfBalls = 2;                      //      1
+let ballRadius = 12;                        //      12
+let ballSpeed = 0.7;                        //      0.7
 
 
 //platforms
-var numberOfPlatformsPerSide = 1;           //      1
+let numberOfPlatformsPerSide = 1;           //      1
 
-var platformClr = [255,255,255]             //      255,255,255
-var platformWidth = 24;                     //      16
-var platformHeight = 64;                    //      64
-var platformSpeed = 6;                      //      6
+let platformClr = [178,154,172];                    //      255,255,255
+let platformWidth = 24;                     //      16
+let platformHeight = 64;                    //      64
+let platformSpeed = 6;                      //      6
 
 function setup() {
 
     //setting up
+    bg = loadImage('./bg.png');
     frameRate(framerate);
     createCanvas(fieldWidth,fieldHeight);
 
-    countdownBoard = createGraphics(width, height);
+    countdownBoard = createGraphics(fieldWidth, height);
     countdownBoard.clear();
-    leftScoreBoard = createGraphics(width, height);
+    leftScoreBoard = createGraphics(fieldWidth, height);
     leftScoreBoard.clear();
-    rightScoreBoard = createGraphics(width, height);
+    rightScoreBoard = createGraphics(fieldWidth, height);
     rightScoreBoard.clear();
 
     field = new Field();
     balls = [];
-    for(var i=0; i<numberOfBalls; i++){
+    for(let i=0; i<numberOfBalls; i++){
         addBall();
     }
     platforms = [];
-    for(var i=0; i<numberOfPlatformsPerSide; i++){
+    for(let i=0; i<numberOfPlatformsPerSide; i++){
         addPlatform("left");
         addPlatform("right");
     }
     waves = [];
+
+    paused = false;
 }
 
 function draw() {
+    if(!paused){
 
-    background(backgroundClr);
-
-    field.show();
-
-    balls.forEach(ball => {
-        ball.show();
-        ball.update();
-    });
-    platforms.forEach(platform => {
-        platform.show();
-        platform.update();
-    });
+        createCanvas(fieldWidth, fieldHeight);
     
-    waves.forEach(wave => {
-        wave.show();
-        wave.update();
-    });
-
-    //countdown();
-    showScore();
-}
-
-function keyPressed(){
-    if(keyCode === 32){
-        if(paused){
-            resume();
+        if(width == 700 && height == 350){
+            background(bg);
+        }else{
+            background(backgroundClr);
         }
-        else{    
-            pause();
-        }
-        this.paused = !this.paused;
+    
+        field.show();
+    
+        balls.forEach(ball => {
+            ball.show();
+            ball.update();
+        });
+        platforms.forEach(platform => {
+            platform.show();
+            platform.update();
+        });
+        
+        waves.forEach(wave => {
+            wave.show();
+            wave.update();
+        });
+    
+        //countdown();
+        showScore();
+        showControlArea();
     }
 }
 
-function addBall(){
-    balls.unshift(new Ball(ballRadius, ballSpeed));
+function keyPressed(){
+    if(keyCode === 32) paused = !paused;
 }
-function removeBall(){
-    balls.splice(0,1);
-}
+
 function addPlatform(leftOrRight){
     platforms.unshift(new Platform(leftOrRight, platformSpeed, platformWidth, platformHeight));
     return;
 }
 
-function pause(){
-    balls.forEach(ball => {
-        ball.pause();
-    });
-    platforms.forEach(platform => {
-        platform.pause();
-    });
-    waves.forEach(wave => {
-        wave.pause();
-    });
-}
-
-function resume(){
-    console.log("Resume");
-    balls.forEach(ball => {
-        ball.resume();
-    });
-    platforms.forEach(platform => {
-        platform.resume();
-    });
-    waves.forEach(wave => {
-        wave.resume();
-    });
-}
-
-var timer = 3;
+let timer = 3;
 function countdown(){
     if(timer > 0){
         pause();
@@ -172,9 +146,9 @@ function countdown(){
         }
     }
 }
-var scoreClr = [255,0,0,30];
-var hitsOnLeft = 0;
-var hitsOnRight = 0;
+let scoreClr = [255,0,0,30];
+let hitsOnLeft = 0;
+let hitsOnRight = 0;
 function showScore(){
     image(leftScoreBoard,0,0);
     image(rightScoreBoard,0,0);

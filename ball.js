@@ -3,19 +3,11 @@ class Ball{
 
     //CONSTRUCTOR
     constructor(radius,speedfactor){
-        this.paused = false;
         this.r = this.setRadius(radius, (1/5));
         this.pos = this.setStartPosition();
         this.speedX = oneOrMinusOne() * random(4.2,4.8) * speedfactor; 
         this.speedY = oneOrMinusOne() * random(3.2,3.8) * speedfactor;
         this.minimumSpeed =  this.speedX;
-
-        this.dentingX = false;
-        this.dentingY = false;
-        this.maxWr = this.r;
-        this.maxHr = this.r;
-        this.wr = this.r;
-        this.hr = this.r;
     }
 
     //SHOW
@@ -23,12 +15,11 @@ class Ball{
         ellipseMode(CENTER);
         fill(255,246,143);
         noStroke(); 
-        ellipse(this.pos.x, this.pos.y, this.wr*2, this.hr*2);
+        ellipse(this.pos.x, this.pos.y, this.r*2, this.r*2);
     }
 
     //UPDATE
     update(){ 
-        if(!this.paused){
 
         //normal movement
         this.pos.x += this.speedX;
@@ -56,17 +47,6 @@ class Ball{
         if(this.touchesBottomWall(fieldHeight)){
             addWaveAt(this.pos.x, fieldHeight,  this.r + this.r * 1/2, fieldSideLinesClr);
             this.goUp();
-        }
-
-        if(this.dentingX){
-            console.log(this.wr);
-            if(this.wr > this.maxWr / 2){
-                this.wr -= this.maxWr / 64;
-            }else{
-                console.log("stopdenting")
-                this.dentingX = false;
-                this.goRight();
-            }
         }
 
         platforms.forEach(platform => {
@@ -97,7 +77,7 @@ class Ball{
                         platform.pushRight(this.speedX);
                         this.goLeft();
                     }
-                    else{w
+                    else{
                         platform.pushLeft(this.speedX);
                         this.goRight();
                     }
@@ -145,8 +125,6 @@ class Ball{
                 }
             }
         });
-
-        }
     }
     
     //SETTER
@@ -178,16 +156,8 @@ class Ball{
         this.setNewRandomSpeedY();
     }
     goRight(){
-        //testzone
-        if(this.wr > this.maxWr / 2){
-            this.wr-=this.maxWr / 16;
-        }else{
-            this.speedX = abs(this.speedX);
-            this.setNewRandomSpeedY();
-        }
-        //testzone end
-        // this.speedX = abs(this.speedX);
-        // this.setNewRandomSpeedY();
+        this.speedX = abs(this.speedX);
+        this.setNewRandomSpeedY();
     }
     goUp(){
         this.speedY = abs(this.speedY) * -1;
@@ -219,14 +189,6 @@ class Ball{
         if(abs(this.speedX) > abs(this.minimumSpeed)){
             this.speedX /= 1.3;
         } 
-    }
-
-    pause(){
-        this.paused = true;
-    }
-
-    resume(){
-        this.paused = false;
     }
 
     //GETTER - NON CHANGING

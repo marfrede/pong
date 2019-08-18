@@ -17,10 +17,10 @@ class Field{
         line(width - (width/2-fieldInnerLineCircleRadius), height/2, width, height/2);
 
         //boxLines
-        stroke(fieldBoxLinesClr);
-        strokeWeight(fieldBoxLineThickness);
-        line(width*boxSpace,0,width*boxSpace,height);
-        line(width - width*boxSpace,0,width - width*boxSpace,height);
+        // stroke(fieldBoxLinesClr);
+        // strokeWeight(fieldBoxLineThickness);
+        // line(width*boxSpace,0,width*boxSpace,height);
+        // line(width - width*boxSpace,0,width - width*boxSpace,height);
 
         //dangerLines
         stroke(fieldDangerLinesClr);
