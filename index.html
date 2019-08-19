@@ -31,9 +31,15 @@
       <div class="d-flex flex-row">
           <h3 class="p-2">Balls</h3>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="addBall()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <button onClick="addBall(1)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
             <h1 id="ballNr"></h1>
-            <button onClick="removeBall()" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+            <button onClick="removeBall(1)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+          </div>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="addBall(10)" type="button" class="btn btn-secondary btn-sm"><h3>+10</h3></button>
+            <button onClick="addBall(50)" type="button" class="btn btn-secondary btn-sm"><h3>+50</h3></button>
+            <button onClick="removeBall(50)" type="button" class="btn btn-secondary btn-sm"><h3>-50</h3></button>
+            <button onClick="removeBall(10)" type="button" class="btn btn-secondary btn-sm"><h3>-10</h3></button>
           </div>
       </div>
   

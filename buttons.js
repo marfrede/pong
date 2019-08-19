@@ -18,13 +18,21 @@ function showControlArea(){
 }
 
 //BALLS
-function addBall(){
-    let lt = ceil(random(10,20));
-    if(balls.length == 0) lt = -1;
-    balls.unshift(new Ball(ballRadius, ballSpeed, lt));
+let maxLT = 50;
+let minLT = 10;
+function addBall(nr=1){
+    for(; nr > 0; nr--){
+        let lt1 = ceil(random(minLT/2,maxLT/2));
+        let lt2 = ceil(random(minLT/2,maxLT/2));
+        let lt = lt1+lt2;
+        if(balls.length == 0) lt = -1;
+        balls.unshift(new Ball(ballRadius, ballSpeed, lt));
+    }
 }
-function removeBall(){
-    balls.splice(random(0, balls.length-1),1);
+function removeBall(nr=1){
+    for(;nr>0;nr--){
+        balls.splice(random(0, balls.length-1),1);
+    }
 }
 
 //FIELD

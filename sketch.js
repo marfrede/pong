@@ -1,6 +1,5 @@
 let countdownBoard;
-let leftScoreBoard;
-let rightScoreBoard;
+let gameOverBoard;
 
 let field;
 let waves;
@@ -10,6 +9,7 @@ let platforms;
 let framerate = 120;                        //  120
 
 let paused = false;
+let gameIsOver = false;
 
 //INITIALIZING                              //  STD VALUES
 //countdown
@@ -62,17 +62,11 @@ function setup() {
     createCanvas(fieldWidth,fieldHeight);
 
     countdownBoard = createGraphics(fieldWidth, height);
-    countdownBoard.clear();
-    leftScoreBoard = createGraphics(fieldWidth, height);
-    leftScoreBoard.clear();
-    rightScoreBoard = createGraphics(fieldWidth, height);
-    rightScoreBoard.clear();
+    gameOverBoard = createCanvas(fieldWidth, fieldHeight);
 
     field = new Field();
     balls = [];
-    for(let i=0; i<numberOfBalls; i++){
-        addBall();
-    }
+    addBall(numberOfBalls);
     platforms = [];
     for(let i=0; i<numberOfPlatformsPerSide; i++){
         addPlatform("left");
@@ -84,43 +78,45 @@ function setup() {
 }
 
 function draw() {
-    if(!paused){
 
-        createCanvas(fieldWidth, fieldHeight);
-    
-        if(width == 700 && height == 350){
-            background(bg);
-        }else{
-            background(backgroundClr);
-        }
-    
-        field.show();
-    
-        balls.forEach((ball, index) => {
-            ball.update();
-            if(ball.lifetime == 0){
-                balls.splice(index,1);
-            }
-            ball.show();
-        });
-        platforms.forEach(platform => {
-            platform.show();
-            platform.update();
-        });
-        
-        waves.forEach(wave => {
-            wave.show();
-            wave.update();
-        });
-    
-        //countdown();
-        showScore();
-        showControlArea();
+    createCanvas(fieldWidth, fieldHeight);
+
+    if(width == 700 && height == 350){
+        background(bg);
+    }else{
+        background(backgroundClr);
     }
+
+    field.show();
+
+    balls.forEach((ball, index) => {
+        if(!paused) ball.update();
+        if(ball.lifetime == 0){
+            balls.splice(index,1);
+        }
+        ball.show();
+    });
+    platforms.forEach(platform => {
+        platform.show();
+        if(!paused) platform.update();
+    });
+    
+    waves.forEach(wave => {
+        wave.show();
+        if(!paused) wave.update();
+    });
+
+    showControlArea();
+    gameOver();
+    countdown();
+    
 }
 
 function keyPressed(){
-    if(keyCode === 32) paused = !paused;
+    if(keyCode === 32){
+        paused = !paused;
+        if(gameIsOver) location.reload();
+    } 
 }
 
 function addPlatform(leftOrRight){
@@ -130,8 +126,8 @@ function addPlatform(leftOrRight){
 
 let timer = 3;
 function countdown(){
-    if(timer > 0){
-        this.paused = true;
+    if(timer >= 0){
+        paused = true;
         image(countdownBoard,0,0);
     
         if(frameCount % 60 == 0 && timer >= 0){
@@ -144,46 +140,42 @@ function countdown(){
         if(timer > 0){
             countdownBoard.text(timer,fieldWidth/2,fieldHeight/2);
         }
-        if(timer == 0){
+        else{
+            paused = false;
             countdownBoard.text("START",fieldWidth/2,fieldHeight/2);
-            this.paused = false;
         }
     }
 }
-let scoreClr = [255,0,0,30];
-let hitsOnLeft = 0;
-let hitsOnRight = 0;
+
 let leftLives = 150;
 let rightLives = 150;
-function showScore(){
-    image(leftScoreBoard,0,0);
-    image(rightScoreBoard,0,0);
-    leftScoreBoard.textAlign(CENTER, CENTER);
-    leftScoreBoard.fill(scoreClr);
-    leftScoreBoard.textSize(fieldHeight/18);
-    leftScoreBoard.text(hitsOnLeft,fieldWidth/15,fieldHeight - fieldHeight/15);
-    rightScoreBoard.textAlign(CENTER, CENTER);
-    rightScoreBoard.fill(scoreClr);
-    rightScoreBoard.textSize(fieldHeight/18);
-    rightScoreBoard.text(hitsOnRight,fieldWidth - fieldWidth/15,fieldHeight - fieldHeight/15);
-}
 
 function hitsLeft(){
-    leftLives--;
-    hitsOnLeft++;
-    leftScoreBoard.textAlign(CENTER, CENTER);
-    leftScoreBoard.fill(scoreClr);
-    leftScoreBoard.textSize(fieldHeight/18);
-    leftScoreBoard.clear();
-    leftScoreBoard.text(hitsOnLeft,fieldWidth/15,fieldHeight - fieldHeight/15);
+    if(!gameIsOver) leftLives = --leftLives < 0? 0 : leftLives;
 }
 
 function hitsRight(){
-    rightLives--;
-    hitsOnRight++;
-    rightScoreBoard.textAlign(CENTER, CENTER);
-    rightScoreBoard.fill(scoreClr);
-    rightScoreBoard.textSize(fieldHeight/18);
-    rightScoreBoard.clear();
-    rightScoreBoard.text(hitsOnRight,fieldWidth - fieldWidth/15,fieldHeight - fieldHeight/15);
+    if(!gameIsOver) rightLives = --rightLives < 0? 0 : rightLives;
+}
+
+function gameOver(){
+    if(leftLives <= 0 || rightLives <= 0){
+        //paused = true;
+        if(!gameIsOver) addBall(250);
+        if(frameCount % 20 == 0) if(balls.length < 250) addBall(5);
+        gameIsOver = true;
+        image(gameOverBoard,0,0);
+        gameOverBoard.textAlign(CENTER,CENTER);
+        gameOverBoard.textSize(fieldHeight/6);
+        gameOverBoard.text("GAME OVER", fieldWidth/2, fieldHeight/2);
+        gameOverBoard.textSize(fieldHeight/12);
+        if(leftLives <= 0){
+            gameOverBoard.text("Right Player Wins", fieldWidth/2, fieldHeight - fieldHeight/3);
+        }else{
+            gameOverBoard.text("Left Player Wins", fieldWidth/2, fieldHeight - fieldHeight/3);
+        }
+        gameOverBoard.textSize(fieldHeight/15);
+        gameOverBoard.text("HIT SPACE FOR NEW GAME", fieldWidth/2, fieldHeight - fieldHeight/6);
+        
+    }
 }

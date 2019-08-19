@@ -25,15 +25,23 @@ class Ball{
             ellipse(this.pos.x, this.pos.y, this.r*8, this.r*8);
             addWaveAt(this.pos.x,this.pos.y,this.r*8,ballClr);
         }
-        ellipse(this.pos.x, this.pos.y, this.r*2, this.r*2);
+        push();
+        translate(this.pos.x,this.pos.y);
+        beginShape();
+        for(let a = 0; a <= TWO_PI; a+=0.5){
+            let rs = paused? this.r : this.r + random(-this.r/5,this.r/5);
+            let x = rs*cos(a);
+            let y = rs*sin(a);
+            vertex(x,y);
+        }
+        endShape();
+        pop();
+        
 
     }
 
     //UPDATE
     update(){ 
-
-        
-
         //normal movement
         this.pos.x += this.speedX;
         this.pos.y += this.speedY;
