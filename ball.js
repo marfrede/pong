@@ -76,7 +76,7 @@ class Ball{
 
         platforms.forEach(platform => {
             if(this.approachesX(platform)){
-                if(this.touchesPlatformInner(platform)){
+                if(this.touchesObjInner(platform)){
                     this.decrLifetime();;
                     if(platform.isMovingInwards()){
                         this.goFaster();
@@ -93,8 +93,9 @@ class Ball{
                     }   
 
                 }
-                if(this.touchesPlatformOuter(platform)){
-                    this.decrLifetime();;
+                if(this.touchesObjOuter(platform)){
+                    console.log('outer2');
+                    this.decrLifetime();
                     if(platform.isMovingOutwards()){
                         this.goFaster();
                     }else{
@@ -111,7 +112,7 @@ class Ball{
 
                 }
             }else{
-                if(this.touchesPlatformInner(platform)){
+                if(this.touchesObjInner(platform)){
                     this.decrLifetime();;
                     if(platform.isMovingInwards()){
                         if(platform.left){
@@ -122,7 +123,8 @@ class Ball{
                         }
                     }
                 }
-                if(this.touchesPlatformOuter(platform)){
+                if(this.touchesObjOuter(platform)){
+                    console.log('outer');
                     this.decrLifetime();;
                     if(platform.isMovingOutwards()){
                         if(platform.left){
@@ -131,30 +133,81 @@ class Ball{
                         else{
                             this.stickRight();
                         }
-                    }
+                    } 
                 }
             }
 
             if(this.approachesY(platform)){
-                if(this.touchesPlatformBottom(platform)){
+                if(this.touchesObjBottom(platform)){
                     this.decrLifetime();;
                     platform.pushUp(this.speedY);
                     this.goDown();
                 }
-                if(this.touchesPlatformTop(platform)){
+                if(this.touchesObjTop(platform)){
                     this.decrLifetime();;
                     platform.pushDown(this.speedY);
                     this.goUp();
                 }
             }
             else{
-                if(this.touchesPlatformBottom(platform)){
+                if(this.touchesObjBottom(platform)){
                     this.decrLifetime();;
                     this.stickDown(platform);
                 }
-                if(this.touchesPlatformTop(platform)){
+                if(this.touchesObjTop(platform)){
                     this.decrLifetime();;
                     this.stickUp(platform);
+                }
+            }
+        });
+
+        obstacles.forEach(obstacle => {
+            if(this.approachesX(obstacle) && obstacle.approachesX(this)){
+                if(this.touchesObjLeft(obstacle)){
+                    this.decrLifetime();
+                    this.goFaster();
+                    this.goLeft(); 
+
+                }
+                if(this.touchesObjRight(obstacle)){
+                    this.decrLifetime();
+                    this.goFaster();
+                    this.goRight();
+                }
+            }else{
+                if(this.touchesObjLeft(obstacle)){
+                    this.decrLifetime();
+                    this.goSlower();
+                    this.goLeft(); 
+
+                }
+                if(this.touchesObjRight(obstacle)){
+                    this.decrLifetime();
+                    this.goSlower();
+                    this.goRight();
+                }
+            }
+
+            if(this.approachesY(obstacle)){
+                if(this.touchesObjBottom(obstacle)){
+                    this.decrLifetime();;
+                    //obstacle.pushUp(this.speedY);
+                    this.goDown();
+                }
+                if(this.touchesObjTop(obstacle)){
+                    this.decrLifetime();;
+                    //obstacle.pushDown(this.speedY);
+                    this.goUp();
+                }
+            }
+            else{
+                if(this.touchesObjBottom(obstacle)){
+                    this.decrLifetime();;
+                    this.stickDown(obstacle);
+                }
+                if(this.touchesObjTop(obstacle)){
+                    this.decrLifetime();;
+                    this.stickUp(obstacle);
                 }
             }
         });
@@ -235,58 +288,100 @@ class Ball{
 
     //GETTER - NON CHANGING
     touchesTopWall(){
-        if(this.pos.y <= this.r) return true;
+        if(this.pos.y <= this.r) {
+            bounce();
+            return true;
+        }
     }
     touchesBottomWall(h){
-        if(this.pos.y >= h-this.r) return true;
+        if(this.pos.y >= h-this.r) {
+            bounce();
+            return true;
+        }
     }
     touchesLeftWall(){
-        if(this.pos.x <= this.r) return true;
+        if(this.pos.x <= this.r) {
+            bounce();
+            return true;
+        }
     }
     touchesRightWall(w){
-        if(this.pos.x >= w-this.r) return true;
+        if(this.pos.x >= w-this.r) {
+            bounce();
+            return true;
+        }
     }
 
-    touchesPlatformInner(platform){
-        var it = platform.getInnerTop();
-        var ob = platform.getOuterBottom();
+    touchesObjInner(obj){
+        var it = obj.getInnerTop();
+        var ob = obj.getOuterBottom();
         var dist = abs(this.pos.x - it.x);
         if(dist <= this.r){
             if(this.pos.y >= it.y && this.pos.y <= ob.y){
+                bounce();
                 return true;
             }
         }
     }
 
-    touchesPlatformOuter(platform) {
-        var it = platform.getInnerTop();
-        var ob = platform.getOuterBottom();
+    touchesObjOuter(obj) {
+        var it = obj.getInnerTop();
+        var ob = obj.getOuterBottom();
         var dist = abs(this.pos.x - ob.x);
         if(dist <= this.r){
             if(this.pos.y >= it.y && this.pos.y <= ob.y){
+                bounce();
                 return true;
             }
         }
     }
 
-    touchesPlatformBottom(platform){
-        var br = platform.getBottomRight();
-        var tl = platform.getTopLeft();
+    touchesObjBottom(obj){
+        var br = obj.getBottomRight();
+        var tl = obj.getTopLeft();
         var dist = abs(this.pos.y - br.y);
         if(dist <= this.r){
             if(this.pos.x >= tl.x && this.pos.x <= br.x){
+                bounce();
                 return true;
             }
         }
 
     }
     
-    touchesPlatformTop(platform){
-        var br = platform.getBottomRight();
-        var tl = platform.getTopLeft();
+    touchesObjTop(obj){
+        var br = obj.getBottomRight();
+        var tl = obj.getTopLeft();
         var dist = abs(this.pos.y - tl.y);
         if(dist <= this.r){
             if(this.pos.x >= tl.x && this.pos.x <= br.x){
+                bounce();
+                return true;
+            }
+        }
+
+    }
+
+    touchesObjLeft(obj){
+        var br = obj.getBottomRight();
+        var tl = obj.getTopLeft();
+        var dist = abs(this.pos.x - tl.x);
+        if(dist <= this.r){
+            if(this.pos.y <= br.y && this.pos.y >= tl.y){
+                bounce();
+                return true;
+            }
+        }
+
+    }
+    
+    touchesObjRight(obj){
+        var br = obj.getBottomRight();
+        var tl = obj.getTopLeft();
+        var dist = abs(this.pos.x - br.x);
+        if(dist <= this.r){
+            if(this.pos.y <= br.y && this.pos.y >= tl.y){
+                bounce();
                 return true;
             }
         }
@@ -330,12 +425,12 @@ class Ball{
 }
 
 //Functions used by Ball
-function addWaveAt(x, y, radius, waveClr){
-    waves.splice(20,1);
-    waves.unshift(new Wave(x, y, radius, waveClr));
-}
 
 function oneOrMinusOne(){
     if (random() < 0.5) return -1;
     return 1;
+}
+
+function bounce(){
+    bounceCounter++;
 }

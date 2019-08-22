@@ -5,6 +5,7 @@ let field;
 let waves;
 let balls;
 let platforms;
+let obstacles;
 
 let framerate = 120;                        //  120
 
@@ -48,11 +49,23 @@ let ballSpeed = 0.7;                        //      0.7
 
 //platforms
 let numberOfPlatformsPerSide = 1;           //      1
+let mouseControllingR = false;              //      false
+let mouseControllingL = false;              //      false
 
 let platformClr = [178,154,172];                    //      255,255,255
 let platformWidth = 24;                     //      16
 let platformHeight = 64;                    //      64
 let platformSpeed = 6;                      //      6
+
+//obstacles
+let numberOfObstacles = 0;                  //      0
+let obstacleClr = [162,121,13];             //      162,121,13
+let obstacleWidth = 40;                     //      70
+let obstacleHeight = 40;                    //      30
+let obstLifeTime = 30;                     //      30 Sekunden
+
+//score II
+let bounceCounter = 0;
 
 function setup() {
 
@@ -66,13 +79,17 @@ function setup() {
 
     field = new Field();
     balls = [];
-    addBall(numberOfBalls);
     platforms = [];
+    obstacles = [];
     for(let i=0; i<numberOfPlatformsPerSide; i++){
         addPlatform("left");
         addPlatform("right");
     }
+    for(let i=0; i<numberOfObstacles; i++){
+        addObstacle();
+    }
     waves = [];
+    addBall(numberOfBalls);
 
     paused = false;
 }
@@ -87,7 +104,7 @@ function draw() {
         background(backgroundClr);
     }
 
-    field.show();
+    field.showInner();
 
     balls.forEach((ball, index) => {
         if(!paused) ball.update();
@@ -101,6 +118,18 @@ function draw() {
         if(!paused) platform.update();
     });
     
+    obstacles.forEach((obstacle, index) => {
+        obstacle.show();
+        if(!paused){
+            obstacle.update();
+        }else{
+            obstacle.spawnFrame++;
+        }
+        if(obstacle.dies()){
+            obstacles.splice(index,1);
+        }
+    });
+    
     waves.forEach(wave => {
         wave.show();
         if(!paused) wave.update();
@@ -108,7 +137,9 @@ function draw() {
 
     showControlArea();
     gameOver();
-    countdown();
+    //countdown();
+
+    field.showOuter();
     
 }
 
@@ -147,8 +178,8 @@ function countdown(){
     }
 }
 
-let leftLives = 150;
-let rightLives = 150;
+let leftLives = 10000;
+let rightLives = 10000;
 
 function hitsLeft(){
     if(!gameIsOver) leftLives = --leftLives < 0? 0 : leftLives;

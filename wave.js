@@ -1,7 +1,7 @@
 
 
 class Wave{
-    constructor(posx,posy,radius,strokeclr){
+    constructor(posx,posy,radius,strokeclr, startAlpha = 255){
         this.paused = false;
         
         this.pos = createVector(posx,posy);
@@ -9,7 +9,8 @@ class Wave{
         this.color = strokeclr;
         
         this.strikeStroke = false;
-        this.alpha = 255;
+        this.startAlpha = startAlpha;
+        this.alpha = this.startAlpha;
 
         this.minR = radius;
         this.maxR = radius * 3;
@@ -30,7 +31,7 @@ class Wave{
 
     update(){
         if(!this.paused){
-            this.alpha = map(this.r, this.minR, this.maxR, 255, 0)
+            this.alpha = map(this.r, this.minR, this.maxR, this.startAlpha, 0)
             if(this.r >= this.maxR){
                 this.strikeStroke = true;
             }
@@ -45,4 +46,9 @@ class Wave{
         this.paused = false;
     }
 
+}
+
+function addWaveAt(x, y, radius, waveClr, startAlpha=255){
+    waves.splice(20,1);
+    waves.unshift(new Wave(x, y, radius, waveClr, startAlpha));
 }

@@ -2,25 +2,52 @@ function showControlArea(){
 
     platforms.forEach(pl => {
         if(pl.left){
-            document.getElementById('pllw').innerHTML = pl.w;
-            document.getElementById('pllh').innerHTML = pl.h; 
+            $('#pllw').text(pl.w);    
+            $('#pllh').text(pl.h);    
         }else{
-            document.getElementById('plrw').innerHTML = pl.w;
-            document.getElementById('plrh').innerHTML = pl.h; 
+            $('#plrw').text(pl.w);    
+            $('#plrh').text(pl.h);  
         }
     });
 
-    document.getElementById('ballNr').innerHTML = balls.length;
-    document.getElementById('fW').innerHTML = fieldWidth;
-    document.getElementById('fH').innerHTML = fieldHeight;
-    document.getElementById('leftscore').innerHTML = leftLives;
-    document.getElementById('rightscore').innerHTML = rightLives;
+
+    $(document).ready(function () {
+        //DISPLAY CURRENT VALUES
+        $('#ballNr').text(balls.length);    
+        $('#fW').text(fieldWidth);    
+        $('#fH').text(fieldHeight);    
+        $('#leftscore').text(leftLives);    
+        $('#rightscore').text(rightLives);    
+        $('#numberOfObstacles').text(obstacles.length);    
+        $('#bounceCounter').text(bounceCounter);    
+        
+        if(mouseControllingR){
+            $('#rightCtrlToggle .active').addClass('btn-secondary');
+            $('#rightCtrlToggle .active').removeClass('active');
+            $('#rightCtrlToggle .mouse').addClass('btn-success');
+            $('#rightCtrlToggle .mouse').addClass('active');
+        }else{
+            $('#rightCtrlToggle .active').addClass('btn-success');
+            $('#rightCtrlToggle .mouse').addClass('btn-secondary');
+        }
+        
+        if(mouseControllingL){
+            $('#leftCtrlToggle .active').addClass('btn-secondary');
+            $('#leftCtrlToggle .active').removeClass('active');
+            $('#leftCtrlToggle .mouse').addClass('btn-success');
+            $('#leftCtrlToggle .mouse').addClass('active');
+        }else{
+            $('#leftCtrlToggle .active').addClass('btn-success');
+            $('#leftCtrlToggle .mouse').addClass('btn-secondary');
+        }
+    });
+    
 }
 
 //BALLS
-let maxLT = 50;
-let minLT = 10;
 function addBall(nr=1){
+    let maxLT = 50+obstacles.length*10;
+    let minLT = 10+obstacles.length*10;
     for(; nr > 0; nr--){
         let lt1 = ceil(random(minLT/2,maxLT/2));
         let lt2 = ceil(random(minLT/2,maxLT/2));
@@ -100,6 +127,26 @@ function lessPlHeight(leftBool){
     });
 }
 
+function changeCtrlR(){
+    mouseControllingR = !mouseControllingR;
+    $('#rightCtrlToggle .active').addClass('btn-secondary');
+    $('#rightCtrlToggle .active').removeClass('btn-success');
+    $('#rightCtrlToggle .btn:not(.active)').addClass('btn-success');
+    $('#rightCtrlToggle .btn:not(.active)').removeClass('btn-secondary');
+    $('#rightCtrlToggle .active').removeClass('active');
+    $('#rightCtrlToggle .btn-success').addClass('active');
+}
+
+function changeCtrlL(){
+    mouseControllingL = !mouseControllingL;
+    $('#leftCtrlToggle .active').addClass('btn-secondary');
+    $('#leftCtrlToggle .active').removeClass('btn-success');
+    $('#leftCtrlToggle .btn:not(.active)').addClass('btn-success');
+    $('#leftCtrlToggle .btn:not(.active)').removeClass('btn-secondary');
+    $('#leftCtrlToggle .active').removeClass('active');
+    $('#leftCtrlToggle .btn-success').addClass('active');
+}
+
 function turnPl(leftBool){
 
 }
@@ -111,5 +158,20 @@ function defaultPlatform(leftBool){
             pl.h = stdPlH;
         }
     });
+}
+
+//OBSTACLEs
+function addObstacle(){
+    let o = new Obstacle(obstacleWidth, obstacleHeight);
+    if(o.pos.x != 0){
+        obstacles.unshift(o);
+    }else{
+        console.log("fail");
+    }
+    return;
+}
+
+function removeObstacle(){
+    obstacles.splice(random(0, obstacles.length-1),1);
 }
 

@@ -53,15 +53,32 @@ class Platform{
             if(keyIsDown(68)) this.moveLeftRight(this.boundaryX);    //d
             if(keyIsDown(87)) this.moveUp();                //w
             if(keyIsDown(83)) this.moveDown(fieldHeight);        //s
+
+            if(mouseControllingL){
+                this.mouseControlL();   
+            }
         }else{          //move right platform with arrows
             if(keyIsDown(LEFT_ARROW)) this.moveRightLeft(this.boundaryX);
             if(keyIsDown(RIGHT_ARROW)) this.moveRightRight(fieldWidth);
             if(keyIsDown(UP_ARROW)) this.moveUp();
             if(keyIsDown(DOWN_ARROW)) this.moveDown(fieldHeight);
-            
+
+            if(mouseControllingR){
+                this.mouseControlR();   
+            }
         }
         this.push();
 
+    }
+
+    mouseControlR(){
+        this.pos.x = map(mouseX,this.boundaryX + this.w/2, width - this.w/2,this.boundaryX + this.w/2, width - this.w/2,true);
+        this.pos.y = map(mouseY,0,height,this.h/2, height - this.h/2, true);
+    }
+
+    mouseControlL(){
+        this.pos.x = map(mouseX,this.boundaryX - this.w/2, this.w/2,this.boundaryX - this.w/2, this.w/2, true);
+        this.pos.y = map(mouseY,0,height,this.h/2, height - this.h/2, true);
     }
 
     moveLeftLeft(){

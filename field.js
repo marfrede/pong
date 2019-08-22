@@ -2,7 +2,7 @@ class Field{
 
     constructor(){}
 
-    show(){
+    showInner(){
 
         //fieldLines
         //innerCircle
@@ -21,6 +21,9 @@ class Field{
         // strokeWeight(fieldBoxLineThickness);
         // line(width*boxSpace,0,width*boxSpace,height);
         // line(width - width*boxSpace,0,width - width*boxSpace,height);
+    }
+
+    showOuter(){
 
         //dangerLines
         stroke(fieldDangerLinesClr);
@@ -33,5 +36,6 @@ class Field{
         strokeWeight(fieldSideLinesThickness);
         line(0,0,width,0);
         line(0,height,width,height);
+
     }
 }

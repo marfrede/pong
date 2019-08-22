@@ -15,7 +15,7 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     >
-
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="p5.min.js"></script>
     <!--<script src="../../../src/p5/addons/p5.dom.js"></script>-->
     <script src="field.js"></script>
@@ -24,28 +24,31 @@
     <script src="wave.js"></script>
     <script src="buttons.js"></script>
     <script src="sketch.js"></script>
+    <script src="obstacle.js"></script>
   </head>
   <body>
     <div id="contrArea">
       <!-- BALLS -->
       <div class="d-flex flex-row">
-          <h3 class="p-2">Balls</h3>
+          <h4 class="p-2">Balls</h4>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="addBall(1)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
-            <h1 id="ballNr"></h1>
-            <button onClick="removeBall(1)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+            <button onClick="addBall(50)" type="button" class="btn btn-secondary btn-sm"><h4>+50</h4></button>
+            <button onClick="addBall(10)" type="button" class="btn btn-secondary btn-sm"><h4>+10</h4></button>
+            <button onClick="addBall()" type="button" class="btn btn-secondary btn-sm"><h4>+1</h4></button>
           </div>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="addBall(10)" type="button" class="btn btn-secondary btn-sm"><h3>+10</h3></button>
-            <button onClick="addBall(50)" type="button" class="btn btn-secondary btn-sm"><h3>+50</h3></button>
-            <button onClick="removeBall(50)" type="button" class="btn btn-secondary btn-sm"><h3>-50</h3></button>
-            <button onClick="removeBall(10)" type="button" class="btn btn-secondary btn-sm"><h3>-10</h3></button>
+            <h1 id="ballNr"></h1>
+          </div>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="removeBall()" type="button" class="btn btn-secondary btn-sm"><h4>-1</h4></button>
+            <button onClick="removeBall(10)" type="button" class="btn btn-secondary btn-sm"><h4>-10</h4></button>
+            <button onClick="removeBall(50)" type="button" class="btn btn-secondary btn-sm"><h4>-50</h4></button>
           </div>
       </div>
   
       <!-- FIELD -->
       <div class="d-flex flex-row">
-          <h3 class="p-2">Field</h3>
+          <h4 class="p-2">Field</h4>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
             <button onClick="moreWidth()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
             <h1 id="fW"></h1>
@@ -57,13 +60,14 @@
             <button onClick="lessHeight()" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
           </div>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="defaultField()" type="button" class="btn btn-secondary btn-sm"><h3>standard</h3></button>
+            <button onClick="defaultField()" type="button" class="standard btn btn-secondary btn-sm">standard</button>
           </div>
       </div>
   
       <!-- PLATFORMS -->
+      <!-- left -->
       <div class="d-flex flex-row">
-          <h3 class="p-2">Platform L</h3>
+          <h4 class="p-2">Platform L</h4>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
             <button onClick="morePlHeight(true)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
             <h1 id="pllh"></h1>
@@ -75,12 +79,19 @@
             <button onClick="lessPlWidth(true)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
           </div>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="defaultPlatform(true)" type="button" class="btn btn-secondary btn-sm"><h3>standard</h3></button>
+            <button onClick="defaultPlatform(true)" type="button" class="standard btn btn-secondary btn-sm">standard</button>
+          </div>
+          <!-- ctrl -->
+          <h6 class="p-2">control</h6>
+          <div id="leftCtrlToggle" onClick="changeCtrlL()" class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn active btn-sm">w a s d</button>
+            <button type="button" class="btn mouse btn-sm">mouse</button>
           </div>
       </div>
 
+      <!-- right -->
       <div class="d-flex flex-row">
-          <h3 class="p-2">Platform R</h3>
+          <h4 class="p-2">Platform R</h4>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
             <button onClick="morePlHeight(false)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
             <h1 id="plrh"></h1>
@@ -92,13 +103,29 @@
             <button onClick="lessPlWidth(false)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
           </div>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="defaultPlatform(false)" type="button" class="btn btn-secondary btn-sm"><h3>standard</h3></button>
+            <button onClick="defaultPlatform(false)" type="button" class="standard btn btn-secondary btn-sm">standard</button>
+          </div>
+          <!-- ctrl -->
+          <h6 class="p-2">control</h6>
+          <div id="rightCtrlToggle" onClick="changeCtrlR()" class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn active btn-sm">arrow keys</button>
+            <button type="button" class="btn mouse btn-sm">mouse</button>
+          </div>
+      </div>
+  
+      <!-- OBSTACLES -->
+      <div class="d-flex flex-row">
+          <h4 class="p-2">Obstacles</h4>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+            <button onClick="addObstacle()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <h1 id="numberOfObstacles"></h1>
+            <button onClick="removeObstacle()" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
           </div>
       </div>
   
       <!-- SCORE -->
       <div id="scoreboard" class="d-flex flex-row">
-          <h3 class="p-2">Lives</h3>
+          <h4 class="p-2">Lives</h4>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
             <img width="35" height="35" src="./heart.png">
             <h1 id="leftscore"></h1>
@@ -107,6 +134,14 @@
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
               <img width="35" height="35" src="./heart.png">
             <h1 id="rightscore"></h1>
+          </div>
+      </div>
+  
+      <!-- SCORE II -->
+      <div class="d-flex flex-row">
+          <h4 class="p-2">Bounce Counter: </h4>
+          <div class="p-2 btn-group" role="group" aria-label="Basic example">
+             <h1 id="bounceCounter"></h1>
           </div>
       </div>
 
