@@ -70,7 +70,7 @@ let bounceCounter = 0;
 function setup() {
 
     //setting up
-    bg = loadImage('./bg.png');
+    bg = loadImage('./asserts/bg.png');
     frameRate(framerate);
     createCanvas(fieldWidth,fieldHeight);
 

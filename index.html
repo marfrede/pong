@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="./asserts/favicon.ico">
     <title>PONG</title>
 
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style/style.css">
 
     <link
       rel="stylesheet"
@@ -16,15 +16,15 @@
       crossorigin="anonymous"
     >
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="p5.min.js"></script>
+    <script src="lib/p5.min.js"></script>
     <!--<script src="../../../src/p5/addons/p5.dom.js"></script>-->
-    <script src="field.js"></script>
-    <script src="ball.js"></script>
-    <script src="platform.js"></script>
-    <script src="wave.js"></script>
+    <script src="objects/field.js"></script>
+    <script src="objects/ball.js"></script>
+    <script src="objects/platform.js"></script>
+    <script src="objects/wave.js"></script>
+    <script src="objects/obstacle.js"></script>
     <script src="buttons.js"></script>
     <script src="sketch.js"></script>
-    <script src="obstacle.js"></script>
   </head>
   <body>
     <div id="contrArea">
@@ -50,14 +50,14 @@
       <div class="d-flex flex-row">
           <h4 class="p-2">Field</h4>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="moreWidth()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <button onClick="moreWidth()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./asserts/+.png" alt="Plus Button"></button>
             <h1 id="fW"></h1>
-            <button onClick="lessWidth()" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+            <button onClick="lessWidth()" type="button" class="btn btn-default"><img width="35" height="35" src="./asserts/-.png" alt="Minus Button"></button>
           </div>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="moreHeight()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <button onClick="moreHeight()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./asserts/+.png" alt="Plus Button"></button>
             <h1 id="fH"></h1>
-            <button onClick="lessHeight()" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+            <button onClick="lessHeight()" type="button" class="btn btn-default"><img width="35" height="35" src="./asserts/-.png" alt="Minus Button"></button>
           </div>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
             <button onClick="defaultField()" type="button" class="standard btn btn-secondary btn-sm">standard</button>
@@ -69,14 +69,14 @@
       <div class="d-flex flex-row">
           <h4 class="p-2">Platform L</h4>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="morePlHeight(true)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <button onClick="morePlHeight(true)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./asserts/+.png" alt="Plus Button"></button>
             <h1 id="pllh"></h1>
-            <button onClick="lessPlHeight(true)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+            <button onClick="lessPlHeight(true)" type="button" class="btn btn-default"><img width="35" height="35" src="./asserts/-.png" alt="Minus Button"></button>
           </div>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="morePlWidth(true)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <button onClick="morePlWidth(true)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./asserts/+.png" alt="Plus Button"></button>
             <h1 id="pllw"></h1>
-            <button onClick="lessPlWidth(true)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+            <button onClick="lessPlWidth(true)" type="button" class="btn btn-default"><img width="35" height="35" src="./asserts/-.png" alt="Minus Button"></button>
           </div>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
             <button onClick="defaultPlatform(true)" type="button" class="standard btn btn-secondary btn-sm">standard</button>
@@ -93,14 +93,14 @@
       <div class="d-flex flex-row">
           <h4 class="p-2">Platform R</h4>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="morePlHeight(false)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <button onClick="morePlHeight(false)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./asserts/+.png" alt="Plus Button"></button>
             <h1 id="plrh"></h1>
-            <button onClick="lessPlHeight(false)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+            <button onClick="lessPlHeight(false)" type="button" class="btn btn-default"><img width="35" height="35" src="./asserts/-.png" alt="Minus Button"></button>
           </div>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="morePlWidth(false)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <button onClick="morePlWidth(false)" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./asserts/+.png" alt="Plus Button"></button>
             <h1 id="plrw"></h1>
-            <button onClick="lessPlWidth(false)" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+            <button onClick="lessPlWidth(false)" type="button" class="btn btn-default"><img width="35" height="35" src="./asserts/-.png" alt="Minus Button"></button>
           </div>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
             <button onClick="defaultPlatform(false)" type="button" class="standard btn btn-secondary btn-sm">standard</button>
@@ -117,9 +117,9 @@
       <div class="d-flex flex-row">
           <h4 class="p-2">Obstacles</h4>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <button onClick="addObstacle()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./+.png" alt="Plus Button"></button>
+            <button onClick="addObstacle()" type="button" class="btn btn-default btn-sm"><img width="35" height="35" src="./asserts/+.png" alt="Plus Button"></button>
             <h1 id="numberOfObstacles"></h1>
-            <button onClick="removeObstacle()" type="button" class="btn btn-default"><img width="35" height="35" src="./-.png" alt="Minus Button"></button>
+            <button onClick="removeObstacle()" type="button" class="btn btn-default"><img width="35" height="35" src="./asserts/-.png" alt="Minus Button"></button>
           </div>
       </div>
   
@@ -127,12 +127,12 @@
       <div id="scoreboard" class="d-flex flex-row">
           <h4 class="p-2">Lives</h4>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-            <img width="35" height="35" src="./heart.png">
+            <img width="35" height="35" src="./asserts/heart.png">
             <h1 id="leftscore"></h1>
           </div>
           <h1 class="p-2">:</h1>
           <div class="p-2 btn-group" role="group" aria-label="Basic example">
-              <img width="35" height="35" src="./heart.png">
+              <img width="35" height="35" src="./asserts/heart.png">
             <h1 id="rightscore"></h1>
           </div>
       </div>
